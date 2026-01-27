@@ -1,1 +1,21 @@
-<p>carrito-venta works!</p>
+<div class="cart-container">
+  <div class="cart-header">
+    <img src="assets/carrito-venta.svg" alt="carrito" class="cart-icon">
+    <h1>CARRITO DE VENTA</h1>
+  </div>
+
+  <div class="search-section">
+    <input type="text" placeholder="Busqueda por nombre o codigo de barras ...." class="search-input">
+  </div>
+
+  <div class="items-list">
+    <app-card-product-venta></app-card-product-venta>
+    <app-card-product-venta></app-card-product-venta>
+    <app-card-product-venta></app-card-product-venta>
+  </div>
+
+  <div class="cart-actions">
+    <button class="btn-clear">Vaciar carrito</button>
+    <button class="btn-finish">Finalizar venta</button>
+  </div>
+</div>

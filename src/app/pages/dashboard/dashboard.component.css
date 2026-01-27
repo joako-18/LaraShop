@@ -1,0 +1,19 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+.dashboard-grid {
+  display: grid;
+  /* Sidebar (280px), Carrito (Flexible), Detalles (380px) */
+  grid-template-columns: 280px 1fr 380px;
+  height: 100vh;
+  font-family: "Inter", sans-serif;
+}
+
+.main-content {
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.details-panel {
+  padding: 20px;
+  overflow-y: auto;
+}
