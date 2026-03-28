@@ -1,1 +1,61 @@
-<p>card-empleado works!</p>
+<div class="empleados-wrapper">
+
+  <div class="top-bar">
+    <input type="text" class="search-input"
+      placeholder="Busqueda por nombre o codigo de barras ....."
+      [(ngModel)]="searchTerm">
+    <button class="btn-nuevo" (click)="modalAbierto = true">+ Nuevo Empleado</button>
+  </div>
+
+  @if (errorMsg) {
+    <p style="color:#e74c3c; font-style:italic; font-size:0.88rem; text-align:center;">{{ errorMsg }}</p>
+  }
+  @if (cargando) {
+    <p style="color:#aaa; font-style:italic; text-align:center;">Cargando empleados...</p>
+  }
+
+  <div class="empleados-list">
+    @let lista = (empleadosFiltrados$ | async) ?? [];
+    @if (lista.length === 0 && !cargando) {
+      <p class="empty-state">No se encontraron empleados</p>
+    }
+    @for (empleado of lista; track empleado.id_empleado) {
+      <div class="empleado-card">
+        <img src="assets/empleado.svg" alt="empleado" class="empleado-icon">
+        <div class="empleado-info">
+          <span class="empleado-nombre">{{ empleado.nombre }}</span>
+          <a class="empleado-email">{{ empleado.correo }}</a>
+        </div>
+        <span class="empleado-rol">{{ empleado.rol | titlecase }}</span>
+        <span class="estado-badge" [class.inactivo]="empleado.estado === 'inactivo'">
+          {{ empleado.estado | titlecase }}
+        </span>
+        <div class="acciones">
+          <button class="btn-historial" (click)="verHistorial(empleado)">
+            <img src="assets/usuario.svg" alt="historial">
+          </button>
+          <button class="btn-accion" (click)="editarEmpleado(empleado)">
+            <img src="assets/editar.svg" alt="editar">
+          </button>
+          <button class="btn-accion eliminar" (click)="eliminarEmpleado(empleado.id_empleado)">
+            <img src="assets/eliminar.svg" alt="eliminar">
+          </button>
+        </div>
+      </div>
+    }
+  </div>
+
+</div>
+
+<app-modal-nuevo-empleado
+  [isOpen]="modalAbierto"
+  [empleadoEditar]="empleadoEditar"
+  (closed)="onModalClosed()"
+  (guardado)="onEmpleadoGuardado($event)">
+</app-modal-nuevo-empleado>
+
+<app-modal-historial
+  [isOpen]="modalHistorialAbierto"
+  [empleado]="empleadoSeleccionado"
+  (closed)="modalHistorialAbierto = false">
+</app-modal-historial>

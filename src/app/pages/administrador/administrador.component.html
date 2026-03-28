@@ -1,1 +1,93 @@
-<app-navbar></app-navbar>>
+<div class="admin-grid">
+  <app-navbar></app-navbar>
+
+  <main class="admin-main">
+
+    <div class="top-bar">
+      <button class="btn-campana" (click)="abrirNotificaciones()">
+        <img src="assets/campana-notificacion.svg" alt="notificaciones" class="campana-icon">
+      </button>
+    </div>
+
+    <nav class="tabs-nav">
+      <button class="tab-btn" [class.active]="tabActiva === 'dashboard'" (click)="cambiarTab('dashboard')">
+        DASHBOARD
+      </button>
+      <button class="tab-btn" [class.active]="tabActiva === 'proveedores'" (click)="cambiarTab('proveedores')">
+        PROVEEDORES
+      </button>
+      <button class="tab-btn" [class.active]="tabActiva === 'empleados'" (click)="cambiarTab('empleados')">
+        EMPLEADOS
+      </button>
+      <button class="tab-btn" [class.active]="tabActiva === 'descuentos'" (click)="cambiarTab('descuentos')">
+        DESCUENTOS
+      </button>
+    </nav>
+
+    @if (tabActiva === 'dashboard') {
+      <div class="dashboard-content">
+
+        @if (cargando) {
+          <p style="color:#aaa; font-style:italic; text-align:center;">Cargando estadísticas...</p>
+        }
+
+        @if (resumen$ | async; as resumen) {
+          <div class="stats-grid">
+            <div class="stat-card">
+              <span class="stat-label">Ventas del Mes</span>
+              <strong class="stat-value">${{ Number(resumen.ventas_del_mes).toLocaleString('es-MX') }}</strong>
+            </div>
+            <div class="stat-card">
+              <span class="stat-label">Productos</span>
+              <strong class="stat-value">{{ resumen.total_productos }}</strong>
+            </div>
+            <div class="stat-card">
+              <span class="stat-label">Stock bajo</span>
+              <strong class="stat-value">{{ resumen.productos_stock_bajo }}</strong>
+            </div>
+            <div class="stat-card">
+              <span class="stat-label">Ganancias</span>
+              <strong class="stat-value">${{ Number(resumen.ganancias_del_mes).toLocaleString('es-MX') }}</strong>
+            </div>
+          </div>
+        }
+
+        <div class="chart-panel">
+          <h3 class="chart-title">VENTAS Y GANANCIAS</h3>
+          <canvas id="chartVentasGanancias" style="max-height: 220px;"></canvas>
+        </div>
+
+        <div class="charts-row">
+          <div class="chart-panel">
+            <h3 class="chart-title">VENTAS SEMANALES</h3>
+            <canvas id="chartVentasSemanales" style="max-height: 180px;"></canvas>
+          </div>
+          <div class="chart-panel">
+            <h3 class="chart-title">VENTAS POR CATEGORÍA</h3>
+            <canvas id="chartCategorias" style="max-height: 180px;"></canvas>
+          </div>
+        </div>
+
+      </div>
+    }
+
+    @if (tabActiva === 'proveedores') {
+      <app-card-proveedor></app-card-proveedor>
+    }
+
+    @if (tabActiva === 'empleados') {
+      <app-card-empleado></app-card-empleado>
+    }
+
+    @if (tabActiva === 'descuentos') {
+      <app-card-descuento></app-card-descuento>
+    }
+
+  </main>
+
+  <app-modal-notificacion
+    [isOpen]="notificacionesAbiertas"
+    (closed)="notificacionesAbiertas = false">
+  </app-modal-notificacion>
+
+</div>

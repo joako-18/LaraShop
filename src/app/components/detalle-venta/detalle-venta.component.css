@@ -5,55 +5,73 @@
   flex-direction: column;
   align-items: center;
   font-family: 'Inter', sans-serif;
+  gap: 0;
+}
+
+.logo-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 10px 0 16px;
 }
 
 .side-logo {
-  height: 350px;
+  height: 220px;
   width: auto;
-  margin-bottom: 30px;
 }
 
 .btn-corte {
   width: 100%;
-  padding: 12px;
+  padding: 14px;
   background: var(--secondary-color);
   color: white;
   border: none;
   border-radius: 10px;
   font-weight: 800;
-  margin-bottom: 25px;
+  margin-bottom: 18px;
   cursor: pointer;
   font-family: "Inter", sans-serif;
   font-style: italic;
-  font-size: 18px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  font-size: 17px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition: background 0.2s;
+  letter-spacing: 0.5px;
 }
 
-.sale-summary{
-    border-radius: 15px;
-    padding: 30px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-    border: solid 1px rgba(147, 147, 147, 0.2);
+.btn-corte:hover {
+  background: #c9559a;
+}
+
+.sale-summary {
+  width: 100%;
+  border-radius: 15px;
+  padding: 22px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  border: solid 1px rgba(147, 147, 147, 0.2);
+  background: #fff;
+  box-sizing: border-box;
 }
 
 .sale-summary h2 {
   color: var(--secondary-color);
-  font-size: 1.3rem;
+  font-size: 1.15rem;
   font-style: italic;
-  margin-bottom: 20px;
+  margin: 0 0 16px 0;
   font-weight: 800;
+  text-align: center;
 }
 
 .info-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 15px;
-  margin-bottom: 20px;
+  gap: 10px;
+  margin-bottom: 14px;
 }
 
 .info-item label {
   display: block;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   color: #999;
   font-style: italic;
 }
@@ -62,57 +80,137 @@
   font-style: italic;
   font-weight: 800;
   color: #6B6B6B;
+  font-size: 0.88rem;
 }
 
-.full-width { grid-column: span 2; }
+.full-width {
+  grid-column: span 2;
+}
 
-hr { border: 0.5px solid #eee; margin: 20px 0; }
+hr {
+  border: none;
+  border-top: 0.5px solid #eee;
+  margin: 12px 0;
+}
 
-.input-field { margin-bottom: 15px; }
+.input-field {
+  margin-bottom: 10px;
+}
 
 .input-field label {
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   color: #999;
   font-style: italic;
-  margin-bottom: 5px;
+  margin-bottom: 4px;
   display: block;
 }
 
 .summary-input {
   width: 100%;
-  padding: 8px;
+  padding: 8px 10px;
   border: 1px solid #ddd;
   border-radius: 5px;
   box-shadow: inset 1px 1px 3px rgba(0,0,0,0.05);
+  box-sizing: border-box;
+  font-size: 0.9rem;
+  font-family: 'Inter', sans-serif;
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.summary-input:focus {
+  border-color: var(--secondary-color);
 }
 
 .totals-table {
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
 }
 
 .total-row {
   display: flex;
   justify-content: space-between;
   color: #666;
-  font-size: 0.9rem;
+  font-size: 0.88rem;
+}
+
+.total-row strong {
+  color: #666;
 }
 
 .total-final {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 20px;
+  margin-top: 14px;
   border-top: 2px solid #eee;
-  padding-top: 20px;
+  padding-top: 14px;
 }
 
-.total-final span { font-weight: 900;  color: #6B6B6B;}
+.total-final span {
+  font-weight: 900;
+  color: #6B6B6B;
+  font-size: 1rem;
+}
 
 .final-price {
   color: var(--secondary-color);
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   font-weight: 800;
+}
+
+.cambio-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+
+.cambio-field label {
+  font-size: 0.75rem;
+  color: #999;
+  font-style: italic;
+}
+
+.cambio-valor {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #aaa;
+  font-style: italic;
+  padding: 4px 0;
+}
+
+.cambio-valor.positivo {
+  color: #27ae60;
+}
+
+.btn-finalizar-venta {
+  width: 100%;
+  padding: 15px;
+  margin-top: 18px;
+  border: none;
+  background: var(--secondary-color);
+  color: white;
+  border-radius: 12px;
+  font-weight: 900;
+  font-style: italic;
+  font-size: 1.1rem;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.18);
+  transition: background 0.2s, transform 0.15s, opacity 0.2s;
+}
+
+.btn-finalizar-venta:hover:not(:disabled) {
+  background: #c9559a;
+  transform: translateY(-1px);
+}
+
+.btn-finalizar-venta:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
 }

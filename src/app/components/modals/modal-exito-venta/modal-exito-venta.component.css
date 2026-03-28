@@ -1,0 +1,104 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+  font-family: 'Inter', sans-serif;
+}
+
+.modal-box {
+  background: #fff;
+  border-radius: 20px;
+  padding: 50px 45px 40px;
+  width: 90%;
+  max-width: 380px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.18);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  animation: popIn 0.25s ease;
+}
+
+@keyframes popIn {
+  from { transform: scale(0.85); opacity: 0; }
+  to   { transform: scale(1);    opacity: 1; }
+}
+
+.icono-exito {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: var(--secondary-color);
+  color: #fff;
+  font-size: 2.2rem;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(217,98,163,0.35);
+}
+
+.modal-title {
+  color: var(--secondary-color);
+  font-style: italic;
+  font-weight: 900;
+  font-size: 1.6rem;
+  margin: 0;
+  text-align: center;
+}
+
+.detalle-venta {
+  width: 100%;
+  background: #fdf5fb;
+  border-radius: 12px;
+  padding: 18px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.detalle-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.95rem;
+  color: #666;
+}
+
+.detalle-row strong {
+  font-weight: 800;
+  color: #444;
+  font-size: 1rem;
+}
+
+.detalle-row.cambio strong {
+  color: var(--secondary-color);
+  font-size: 1.2rem;
+}
+
+.btn-cerrar {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  background: var(--secondary-color);
+  color: white;
+  border-radius: 12px;
+  font-weight: 900;
+  font-style: italic;
+  font-size: 1.05rem;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+  transition: background 0.2s, transform 0.15s;
+}
+
+.btn-cerrar:hover {
+  background: #c9559a;
+  transform: translateY(-1px);
+}

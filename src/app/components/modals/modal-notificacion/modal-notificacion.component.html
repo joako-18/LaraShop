@@ -1,1 +1,26 @@
-<p>modal-notificacion works!</p>
+@if (isOpen) {
+  <div class="notif-overlay" (click)="onOverlayClick($event)">
+    <div class="notif-panel">
+
+      <h2 class="notif-title">NOTIFICACIONES</h2>
+
+      <div class="notif-list">
+        @for (notif of notificaciones; track notif.id_notificacion) {
+          <div class="notif-card" [class.unread]="!notif.enviada">
+            <div class="notif-accent"></div>
+            <div class="notif-body">
+              <p class="notif-nombre">{{ notif.mensaje }}</p>
+              <span class="notif-tiempo">{{ formatearTiempo(notif.fecha) }}</span>
+            </div>
+          </div>
+        }
+        @empty {
+          <p style="text-align:center; color:#aaa; font-style:italic; font-size:0.88rem; padding: 20px 0;">
+            Sin notificaciones
+          </p>
+        }
+      </div>
+
+    </div>
+  </div>
+}

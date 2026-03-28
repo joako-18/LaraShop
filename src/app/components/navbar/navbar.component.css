@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 
 .sidebar {
-  width: 280px; /* Un poco más ancho para acomodar iconos e imágenes */
+  width: 280px;
   height: 100vh;
   background-color: var(--secondary-color);
   color: #ffffff;
@@ -14,7 +14,6 @@
   font-family: "Inter", sans-serif;
 }
 
-/* Logo Superior */
 .sidebar-logo {
   padding: 40px 20px;
   text-align: center;
@@ -24,7 +23,6 @@
   width: 130px;
 }
 
-/* Menú de Navegación */
 .sidebar-menu {
   list-style: none;
   padding: 0;
@@ -36,16 +34,15 @@
   display: flex;
   align-items: center;
   transition: background 0.3s;
-  padding-left: 25px; /* Espacio desde el borde izquierdo */
+  padding-left: 25px;
 }
 
 .sidebar-menu li:hover {
   background-color: rgba(255, 255, 255, 0.1);
 }
 
-/* Estilo para los iconos SVG del menú */
 .sidebar-menu img {
-  width: 35px; /* Tamaño fiel a la imagen original */
+  width: 35px;
   height: auto;
   margin-right: 15px;
 }
@@ -57,12 +54,11 @@
   color: #ffffff;
   text-decoration: none;
   font-size: 1.4rem;
-  font-weight: 800; /* Más grueso como en la imagen */
+  font-weight: 800;
   font-style: italic;
   width: 100%;
 }
 
-/* Sección Inferior */
 .sidebar-footer {
   padding: 15px 0;
   border-top: 2px solid rgba(255, 255, 255, 0.3);
@@ -80,7 +76,6 @@
   text-decoration: none;
 }
 
-/* Iconos SVG del footer */
 .sidebar-footer img {
   width: 28px;
   height: auto;

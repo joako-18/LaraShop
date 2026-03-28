@@ -1,22 +1,28 @@
 <div class="details-container">
-  <img src="assets/logo-rosa.png" alt="Lara Logo" class="side-logo">
-
-  <button class="btn-corte">CORTE DE CAJA</button>
+  <div class="logo-wrapper">
+    <img src="assets/logo-rosa.png" alt="Lara Logo" class="side-logo">
+  </div>
+  <button class="btn-corte" (click)="modalCorteCajaAbierto = true">CORTE DE CAJA</button>
 
   <div class="sale-summary">
     <h2>DETALLES DE VENTA</h2>
+
+    @if (cargando) {
+      <p style="color:#aaa; font-style:italic; font-size:0.85rem; text-align:center;">Cargando...</p>
+    }
+
     <div class="info-grid">
       <div class="info-item">
         <label>Fecha</label>
-        <strong>23 de mayo 2025</strong>
+        <strong>{{ fechaHoy }}</strong>
       </div>
       <div class="info-item">
         <label>Empleado</label>
-        <strong>00000001</strong>
+        <strong>{{ nombreEmpleado }}</strong>
       </div>
       <div class="info-item full-width">
         <label>ID de venta</label>
-        <strong>00000123</strong>
+        <strong>{{ idVenta }}</strong>
       </div>
     </div>
 
@@ -24,24 +30,65 @@
 
     <div class="input-field">
       <label>Cantidad recibida:</label>
-      <input type="text" class="summary-input">
-    </div>
-
-    <div class="input-field">
-      <label>Cambio:</label>
-      <label for=""></label>
+      <input
+        type="number"
+        class="summary-input"
+        [(ngModel)]="cantidadRecibida"
+        placeholder="0.00"
+        min="0">
     </div>
 
     <hr>
 
     <div class="totals-table">
-      <div class="total-row"><span>Sub Total:</span> <strong>$2500.00</strong></div>
-      <div class="total-row"><span>Descuento:</span> <strong>$0.00</strong></div>
-      <div class="total-row"><span>IVA:</span> <strong>$400.00</strong></div>
+      <div class="total-row">
+        <span>Sub Total:</span>
+        <strong>${{ subTotal.toFixed(2) }}</strong>
+      </div>
+      <div class="total-row">
+        <span>Descuento:</span>
+        <strong>$0.00</strong>
+      </div>
+      <div class="total-row">
+        <span>IVA:</span>
+        <strong>$0.00</strong>
+      </div>
       <div class="total-final">
         <span>TOTAL:</span>
-        <label class="final-price">$2900.00</label>
+        <label class="final-price">${{ subTotal.toFixed(2) }}</label>
       </div>
     </div>
   </div>
+
+  <button
+    class="btn-finalizar-venta"
+    (click)="solicitarConfirmacion()"
+    [disabled]="!puedeFinalizarVenta">
+    {{ procesando ? 'Procesando...' : 'Finalizar venta' }}
+  </button>
+
 </div>
+
+<app-modal-corte-caja
+  [isOpen]="modalCorteCajaAbierto"
+  (closed)="modalCorteCajaAbierto = false"
+  (finalizado)="onCorteFinalizado($event)">
+</app-modal-corte-caja>
+
+<app-modal-confirmacion
+  [isOpen]="modalConfirmacionAbierto"
+  titulo="FINALIZAR VENTA"
+  [mensaje]="resumenParaConfirmacion"
+  labelConfirmar="Confirmar venta"
+  labelCancelar="CANCELAR"
+  [cargando]="procesando"
+  (confirmado)="confirmarVenta()"
+  (cancelado)="modalConfirmacionAbierto = false">
+</app-modal-confirmacion>
+
+<app-modal-exito-venta
+  [isOpen]="modalExitoAbierto"
+  [total]="totalUltimaVenta"
+  [cambio]="cambioUltimaVenta"
+  (cerrado)="onExitoCerrado()">
+</app-modal-exito-venta>

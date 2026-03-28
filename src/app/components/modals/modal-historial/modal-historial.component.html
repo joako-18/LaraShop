@@ -1,1 +1,60 @@
-<p>modal-historial works!</p>
+@if (isOpen) {
+  <div class="modal-overlay" (click)="onOverlayClick($event)">
+    <div class="modal-box">
+
+      <h2 class="modal-title">HISTORIAL DE EMPLEADOS</h2>
+
+      @if (empleado) {
+        <div class="empleado-card">
+          <div class="empleado-card-top">
+            <img src="assets/empleado.svg" alt="empleado" class="empleado-avatar">
+            <div class="empleado-datos-principales">
+              <span class="emp-nombre">{{ empleado.nombre }}</span>
+              <span class="emp-email">{{ empleado.correo }}</span>
+            </div>
+          </div>
+          <div class="empleado-card-grid">
+            <div class="emp-field">
+              <span class="emp-label">Rol:</span>
+              <span class="emp-value">{{ empleado.rol | titlecase }}</span>
+            </div>
+            <div class="emp-field">
+              <span class="emp-label">Fecha de ingreso:</span>
+              <span class="emp-value">{{ empleado.fechaIngreso }}</span>
+            </div>
+            <div class="emp-field">
+              <span class="emp-label">Estado:</span>
+              <span class="estado-badge" [class.inactivo]="empleado.estado === 'inactivo'">
+                {{ empleado.estado | titlecase }}
+              </span>
+            </div>
+            <div class="emp-field">
+              <span class="emp-label">Telefono:</span>
+              <span class="emp-value">{{ empleado.telefono ?? '—' }}</span>
+            </div>
+          </div>
+        </div>
+      }
+
+      @if (cargando) {
+        <p style="text-align:center; color:#aaa; font-style:italic; font-size:0.85rem;">
+          Cargando historial...
+        </p>
+      }
+
+      <div class="historial-list">
+        @for (item of historial; track item.id_historial) {
+          <app-card-historial [item]="item"></app-card-historial>
+        }
+        @empty {
+          @if (!cargando) {
+            <p style="text-align:center; color:#aaa; font-style:italic; font-size:0.85rem; padding: 20px 0;">
+              Sin actividad registrada
+            </p>
+          }
+        }
+      </div>
+
+    </div>
+  </div>
+}

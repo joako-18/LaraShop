@@ -1,1 +1,41 @@
-<p>card-producto-inventario-imagen works!</p>
+<div class="product-card">
+  <div class="card-image">
+    @if (imagenUrl) {
+      <img [src]="imagenUrl" [alt]="producto.nombre" class="img-real">
+    } @else {
+      <div class="img-placeholder"></div>
+    }
+    <span class="estado-badge-img" [ngClass]="getEstadoClass()">
+      {{ getEstadoLabel() }}
+    </span>
+  </div>
+
+  <div class="card-body">
+    <div class="card-title-row">
+      <span class="card-nombre">{{ producto.nombre }}</span>
+      <button class="menu-btn" (click)="toggleMenu()">•••</button>
+      @if (menuAbierto) {
+        <div class="dropdown-menu">
+          <button (click)="onEditar()">
+            <img src="assets/editar.svg" alt="editar"> Editar
+          </button>
+          <button (click)="onEliminar()" class="danger">
+            <img src="assets/eliminar.svg" alt="eliminar"> Eliminar
+          </button>
+        </div>
+      }
+    </div>
+
+    <div class="card-tags">
+      <span class="sku-badge">{{ codigoBarras }}</span>
+      <span class="categoria-badge">{{ producto.categoria?.nombre ?? '—' }}</span>
+    </div>
+
+    <div class="card-info-row">
+      <span class="card-precio">${{ producto.precio }}</span>
+      <span class="card-stock">Stock: {{ producto.stock }}</span>
+    </div>
+
+    <span class="card-proveedor">Proveedor: {{ producto.proveedor?.nombre ?? '—' }}</span>
+  </div>
+</div>

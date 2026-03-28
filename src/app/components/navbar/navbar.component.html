@@ -2,10 +2,9 @@
   <div class="sidebar-logo">
     <img src="assets/logo-blanco-free.png" alt="Lara Shop Logo">
   </div>
-
   <ul class="sidebar-menu">
     <li>
-      <a (click)="navigateTo('/caja')">
+      <a (click)="navigateTo('/dashboard')">
         <img src="assets/caja.svg" alt="Icono Caja">
         Caja
       </a>
@@ -16,20 +15,20 @@
         Inventario
       </a>
     </li>
-    <li>
-      <a (click)="navigateTo('/administrador')">
-        <img src="assets/admin.svg" alt="Icono Administrador">
-        Administrador
-      </a>
-    </li>
+    @if (esAdmin) {
+      <li>
+        <a (click)="navigateTo('/admin')">
+          <img src="assets/admin.svg" alt="Icono Administrador">
+          Administrador
+        </a>
+      </li>
+    }
   </ul>
-
   <div class="sidebar-footer">
     <div class="user-profile">
       <img src="assets/usuario.svg" alt="Icono Usuario">
-      Joaquin Diaz
+      {{ nombre }}
     </div>
-    
     <div class="logout-action">
       <a (click)="onLogout()">
         <img src="assets/cerrar-sesion.svg" alt="Icono Cerrar Sesión">

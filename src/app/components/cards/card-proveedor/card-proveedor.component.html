@@ -1,1 +1,53 @@
-<p>card-proveedor works!</p>
+<div class="proveedores-wrapper">
+
+  <div class="top-bar">
+    <input type="text" class="search-input"
+      placeholder="Busqueda por nombre o codigo de barras ....."
+      [(ngModel)]="searchTerm">
+    <button class="btn-nuevo" (click)="modalAbierto = true">+ Nuevo Proveedor</button>
+  </div>
+
+  @if (errorMsg) {
+    <p style="color:#e74c3c; font-style:italic; font-size:0.88rem; text-align:center;">{{ errorMsg }}</p>
+  }
+  @if (cargando) {
+    <p style="color:#aaa; font-style:italic; text-align:center;">Cargando proveedores...</p>
+  }
+
+  <div class="proveedores-list">
+    @let lista = (proveedoresFiltradosSync | async) ?? [];
+    @if (lista.length === 0 && !cargando) {
+      <p class="empty-state">No se encontraron proveedores</p>
+    }
+    @for (proveedor of lista; track proveedor.id_proveedor) {
+      <div class="proveedor-card">
+        <img src="assets/proveedor.svg" alt="proveedor" class="proveedor-icon">
+        <div class="proveedor-info">
+          <span class="proveedor-nombre">{{ proveedor.nombre }}</span>
+          <a class="proveedor-email">{{ proveedor.contacto ?? '—' }}</a>
+        </div>
+        <span class="proveedor-tel">{{ proveedor.contacto ?? '—' }}</span>
+        <span class="proveedor-productos">{{ proveedor.direccion ?? '—' }}</span>
+        <span class="estado-badge" [class.inactivo]="proveedor.estado === 'inactivo'">
+          {{ proveedor.estado | titlecase }}
+        </span>
+        <div class="acciones">
+          <button class="btn-accion" (click)="editarProveedor(proveedor)">
+            <img src="assets/editar.svg" alt="editar">
+          </button>
+          <button class="btn-accion eliminar" (click)="eliminarProveedor(proveedor.id_proveedor)">
+            <img src="assets/eliminar.svg" alt="eliminar">
+          </button>
+        </div>
+      </div>
+    }
+  </div>
+
+</div>
+
+<app-modal-nuevo-proveedor
+  [isOpen]="modalAbierto"
+  [proveedorEditar]="proveedorEditar"
+  (closed)="onModalClosed()"
+  (guardado)="onProveedorGuardado($event)">
+</app-modal-nuevo-proveedor>

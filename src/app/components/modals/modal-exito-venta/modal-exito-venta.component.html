@@ -1,0 +1,21 @@
+@if (isOpen) {
+  <div class="modal-overlay">
+    <div class="modal-box">
+      <div class="icono-exito">✓</div>
+      <h2 class="modal-title">¡Venta Exitosa!</h2>
+      <div class="detalle-venta">
+        <div class="detalle-row">
+          <span>Total cobrado:</span>
+          <strong>${{ total.toFixed(2) }}</strong>
+        </div>
+        <div class="detalle-row cambio">
+          <span>Cambio:</span>
+          <strong>${{ cambio.toFixed(2) }}</strong>
+        </div>
+      </div>
+      <button class="btn-cerrar" (click)="cerrado.emit()">
+        Nueva venta
+      </button>
+    </div>
+  </div>
+}

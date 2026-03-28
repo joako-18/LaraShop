@@ -1,1 +1,31 @@
-<p>modal-nuevo-proveedor works!</p>
+@if (isOpen) {
+  <div class="modal-overlay" (click)="onOverlayClick($event)">
+    <div class="modal-box">
+
+      <h2 class="modal-title">{{ modoEdicion ? 'EDITAR PROVEEDOR' : 'NUEVO PROVEEDOR' }}</h2>
+
+      <div class="form-group">
+        <label>Nombre:</label>
+        <input type="text" class="modal-input" [(ngModel)]="form.nombre">
+      </div>
+
+      <div class="form-group">
+        <label>Contacto:</label>
+        <input type="text" class="modal-input" [(ngModel)]="form.contacto">
+      </div>
+
+      <div class="form-group">
+        <label>Dirección:</label>
+        <input type="text" class="modal-input" [(ngModel)]="form.direccion">
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn-cancelar" (click)="cerrar()">CANCELAR</button>
+        <button class="btn-agregar" (click)="guardar()">
+          {{ modoEdicion ? 'Guardar Cambios' : 'Agregar Proveedor' }}
+        </button>
+      </div>
+
+    </div>
+  </div>
+}

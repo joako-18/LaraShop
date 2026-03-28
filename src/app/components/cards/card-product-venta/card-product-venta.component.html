@@ -1,17 +1,26 @@
 <div class="product-card">
-  <div class="sku-badge">021645897</div>
+  <div class="sku-badge">{{ codigoBarras }}</div>
   <div class="product-info">
-    <span class="product-name">Blusa roja</span>
-    <span class="product-price">$500.00</span>
+    <span class="product-name">{{ item.producto.nombre }}</span>
+    <span class="product-price">${{ item.producto.precio }}</span>
   </div>
-  
+  <div class="stock-info">
+    <span class="stock-label">Stock: {{ stockMaximo }}</span>
+  </div>
   <div class="quantity-controls">
-    <button class="qty-btn">-</button>
-    <span class="qty-number">1</span>
-    <button class="qty-btn">+</button>
+    <button class="qty-btn" (click)="decrementar()" [disabled]="item.cantidad <= 1">-</button>
+    <input
+      type="number"
+      class="qty-input"
+      [value]="item.cantidad"
+      [max]="stockMaximo"
+      min="1"
+      (change)="onCantidadInput($event)"
+      (click)="$event.stopPropagation()">
+    <button class="qty-btn" (click)="incrementar()" [disabled]="item.cantidad >= stockMaximo">+</button>
   </div>
-
-  <button class="delete-btn">
+  <span class="subtotal-text">${{ subtotal.toFixed(2) }}</span>
+  <button class="delete-btn" (click)="onEliminar()">
     <img src="assets/eliminar.svg" alt="eliminar">
   </button>
 </div>

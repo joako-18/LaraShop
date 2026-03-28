@@ -5,17 +5,46 @@
   </div>
 
   <div class="search-section">
-    <input type="text" placeholder="Busqueda por nombre o codigo de barras ...." class="search-input">
+    <input
+      #searchInput
+      type="text"
+      placeholder="Escanea o escribe el código de barras y presiona Enter..."
+      class="search-input"
+      [(ngModel)]="searchTerm"
+      (ngModelChange)="onSearchChange()"
+      (keydown.enter)="onEnter()"
+      (blur)="onBlur()"
+      autocomplete="off">
+
+    @if (buscando) {
+      <p class="search-hint">Buscando...</p>
+    }
+    @if (noEncontrado) {
+      <p class="search-hint error">Código no encontrado</p>
+    }
   </div>
 
   <div class="items-list">
-    <app-card-product-venta></app-card-product-venta>
-    <app-card-product-venta></app-card-product-venta>
-    <app-card-product-venta></app-card-product-venta>
+    @for (item of carrito; track item.producto.id_producto) {
+      <app-card-product-venta
+        [item]="item"
+        (cantidadChange)="onCantidadChange($event)"
+        (eliminar)="onEliminarItem($event)">
+      </app-card-product-venta>
+    }
+    @empty {
+      <p class="empty-carrito">El carrito está vacío. Escanea un código de barras para agregar.</p>
+    }
   </div>
 
+  @if (errorMsg) {
+    <p class="msg-error">{{ errorMsg }}</p>
+  }
+  @if (ventaExitosa) {
+    <p class="msg-exito">¡Venta realizada con éxito!</p>
+  }
+
   <div class="cart-actions">
-    <button class="btn-clear">Vaciar carrito</button>
-    <button class="btn-finish">Finalizar venta</button>
+    <button class="btn-clear" (click)="vaciarCarrito()">Vaciar carrito</button>
   </div>
 </div>

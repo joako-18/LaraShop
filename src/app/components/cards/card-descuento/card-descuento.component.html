@@ -1,1 +1,56 @@
-<p>card-descuento works!</p>
+<div class="descuentos-wrapper">
+
+  <div class="top-bar">
+    <input type="text" class="search-input"
+      placeholder="Busqueda por nombre o codigo de barras ....."
+      [(ngModel)]="searchTerm">
+    <button class="btn-nuevo" (click)="modalAbierto = true">+ Nuevo Descuento</button>
+  </div>
+
+  @if (errorMsg) {
+    <p style="color:#e74c3c; font-style:italic; font-size:0.88rem; text-align:center;">{{ errorMsg }}</p>
+  }
+  @if (cargando) {
+    <p style="color:#aaa; font-style:italic; text-align:center;">Cargando descuentos...</p>
+  }
+
+  <div class="descuentos-list">
+    @let lista = (descuentosFiltrados$ | async) ?? [];
+    @if (lista.length === 0 && !cargando) {
+      <p class="empty-state">No se encontraron descuentos</p>
+    }
+    @for (descuento of lista; track descuento.id_descuento) {
+      <div class="descuento-card">
+        <img src="assets/descuento.svg" alt="descuento" class="descuento-icon">
+        <div class="descuento-info">
+          <span class="descuento-nombre">{{ getNombreDescuento(descuento) }}</span>
+          <span class="descuento-valor">{{ getValorLabel(descuento) }} de descuento</span>
+        </div>
+        <div class="descuento-fechas">
+          <span>del {{ descuento.fecha_inicio }}</span>
+          <span>al {{ descuento.fecha_fin }}</span>
+        </div>
+        <span class="categoria-badge">{{ getCategoriaLabel(descuento) }}</span>
+        <span class="estado-badge" [ngClass]="getEstadoClass(descuento)">
+          {{ getEstadoLabel(descuento) }}
+        </span>
+        <div class="acciones">
+          <button class="btn-accion" (click)="editarDescuento(descuento)">
+            <img src="assets/editar.svg" alt="editar">
+          </button>
+          <button class="btn-accion eliminar" (click)="eliminarDescuento(descuento.id_descuento)">
+            <img src="assets/eliminar.svg" alt="eliminar">
+          </button>
+        </div>
+      </div>
+    }
+  </div>
+
+</div>
+
+<app-modal-nuevo-descuento
+  [isOpen]="modalAbierto"
+  [descuentoEditar]="descuentoEditar"
+  (closed)="onModalClosed()"
+  (guardado)="onDescuentoGuardado($event)">
+</app-modal-nuevo-descuento>

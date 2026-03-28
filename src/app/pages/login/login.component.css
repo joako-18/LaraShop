@@ -9,7 +9,6 @@
   font-family: "Inter", sans-serif;
 }
 
-/* La tarjeta rosa fuerte */
 .login-card {
   background-color: var(--secondary-color);
   width: 90%;
@@ -24,7 +23,6 @@
   align-items: center;
 }
 
-/* Estilos de los textos superiores */  
 .main-logo {
   width: 150px;
 }
@@ -48,7 +46,6 @@
   text-shadow: 0 4px 4px rgb(0, 0, 0, 0.25);
 }
 
-/* Estilos del Formulario */
 .login-form {
   margin-top: 20px;
 }
@@ -72,13 +69,12 @@
   padding: 12px;
   border: none;
   border-radius: 8px;
-  box-sizing: border-box; /* Importante para que no se salga del contenedor */
+  box-sizing: border-box;
   font-size: 1rem;
   outline: none;
   box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
 
-/* Estilo del Botón */
 .button-area {
   margin-top: 35px;
 }
@@ -97,11 +93,26 @@
 }
 
 .login-button:hover {
-  background-color: #f5b3d6; /* Un rosa ligeramente más claro al pasar el mouse */
+  background-color: #f5b3d6;
   transform: translateY(-2px);
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
 }
 
 .login-button:active {
   transform: translateY(0);
+}
+
+.error-msg {
+  color: #ffe0f0;
+  font-size: 0.88rem;
+  text-align: center;
+  margin: -10px 0 5px 0;
+  font-style: italic;
+  font-weight: 600;
+}
+
+.login-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
 }

@@ -1,1 +1,7 @@
-<p>card-historial works!</p>
+<div class="historial-item">
+  <div class="historial-icono">{{ getIcono(item.accion.nombre) }}</div>
+  <div class="historial-info">
+    <span class="historial-accion">{{ item.accion.descripcion ?? item.accion.nombre }}</span>
+    <span class="historial-fecha">{{ formatearFecha(item.fecha) }}</span>
+  </div>
+</div>

@@ -1,1 +1,65 @@
-<p>modal-nuevo-descuento works!</p>
+@if (isOpen) {
+  <div class="modal-overlay" (click)="onOverlayClick($event)">
+    <div class="modal-box">
+
+      <h2 class="modal-title">{{ modoEdicion ? 'EDITAR DESCUENTO' : 'NUEVO DESCUENTO' }}</h2>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Tipo:</label>
+          <select class="modal-input" [(ngModel)]="form.tipo">
+            <option value="" disabled>Selecciona</option>
+            <option value="porcentaje">Porcentaje</option>
+            <option value="monto_fijo">Monto fijo</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Valor:</label>
+          <input type="number" class="modal-input" [(ngModel)]="form.valor">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Categoría:</label>
+          <select class="modal-input" [(ngModel)]="form.id_categoria"
+            (ngModelChange)="form.id_producto = null; form.aplica_total = false">
+            <option [ngValue]="null">Sin categoría</option>
+            @for (cat of categorias; track cat.id_categoria) {
+              <option [ngValue]="cat.id_categoria">{{ cat.nombre }}</option>
+            }
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Producto:</label>
+          <select class="modal-input" [(ngModel)]="form.id_producto"
+            (ngModelChange)="form.id_categoria = null; form.aplica_total = false">
+            <option [ngValue]="null">Sin producto</option>
+            @for (prod of productos; track prod.id_producto) {
+              <option [ngValue]="prod.id_producto">{{ prod.nombre }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Fecha de inicio:</label>
+          <input type="date" class="modal-input" [(ngModel)]="form.fechaInicio">
+        </div>
+        <div class="form-group">
+          <label>Fecha de fin:</label>
+          <input type="date" class="modal-input" [(ngModel)]="form.fechaFin">
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn-cancelar" (click)="cerrar()">CANCELAR</button>
+        <button class="btn-agregar" (click)="guardar()">
+          {{ modoEdicion ? 'Guardar Cambios' : 'Agregar Descuento' }}
+        </button>
+      </div>
+
+    </div>
+  </div>
+}

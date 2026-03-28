@@ -1,1 +1,80 @@
-<p>modal-nuevo-producto works!</p>
+@if (isOpen) {
+  <div class="modal-overlay" (click)="onOverlayClick($event)">
+    <div class="modal-box">
+
+      <h2 class="modal-title">{{ modoEdicion ? 'EDITAR PRODUCTO' : 'NUEVO PRODUCTO' }}</h2>
+
+      <div class="form-group">
+        <label>Código de barras:</label>
+        <input type="text" class="modal-input full" [(ngModel)]="form.codigoBarras"
+          placeholder="Ej: 021645897">
+      </div>
+
+      <div class="form-group">
+        <label>Nombre:</label>
+        <input type="text" class="modal-input full" [(ngModel)]="form.nombre">
+      </div>
+
+      <div class="form-group">
+        <label>Precio:</label>
+        <input type="number" class="modal-input" [(ngModel)]="form.precio">
+      </div>
+
+      <div class="form-group">
+        <label>Cantidad:</label>
+        <input type="number" class="modal-input" [(ngModel)]="form.cantidad">
+      </div>
+
+      <div class="form-group">
+        <label>Cantidad mínima:</label>
+        <input type="number" class="modal-input" [(ngModel)]="form.cantidadMinima">
+      </div>
+
+      <div class="form-group">
+        <label>Categoría:</label>
+        <select class="modal-input" [(ngModel)]="form.id_categoria">
+          <option [ngValue]="null" disabled>Selecciona una categoría</option>
+          @for (cat of categorias; track cat.id_categoria) {
+            <option [ngValue]="cat.id_categoria">{{ cat.nombre }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Proveedor:</label>
+        <select class="modal-input" [(ngModel)]="form.id_proveedor">
+          <option [ngValue]="null" disabled>Selecciona un proveedor</option>
+          @for (prov of proveedores; track prov.id_proveedor) {
+            <option [ngValue]="prov.id_proveedor">{{ prov.nombre }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Imagen:</label>
+        <div
+          class="image-dropzone"
+          (click)="fileInput.click()"
+          (dragover)="$event.preventDefault()"
+          (drop)="onDrop($event)">
+          @if (subiendoImagen) {
+            <span class="dropzone-hint">Subiendo imagen...</span>
+          } @else if (imagenPreview) {
+            <img [src]="imagenPreview" alt="preview" class="image-preview">
+          } @else {
+            <span class="dropzone-hint">Haz clic o arrastra una imagen aquí</span>
+          }
+        </div>
+        <input #fileInput type="file" accept="image/*" style="display:none" (change)="onFileChange($event)">
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn-cancelar" (click)="cerrar()">CANCELAR</button>
+        <button class="btn-agregar" (click)="guardar()" [disabled]="subiendoImagen">
+          {{ subiendoImagen ? 'Subiendo imagen...' : (modoEdicion ? 'Guardar Cambios' : 'Agregar Producto') }}
+        </button>
+      </div>
+
+    </div>
+  </div>
+}

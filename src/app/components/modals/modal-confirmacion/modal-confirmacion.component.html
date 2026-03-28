@@ -1,0 +1,18 @@
+@if (isOpen) {
+  <div class="modal-overlay" (click)="onOverlayClick($event)">
+    <div class="modal-box">
+      <h2 class="modal-title">{{ titulo }}</h2>
+      @if (mensaje) {
+        <p class="modal-mensaje">{{ mensaje }}</p>
+      }
+      <div class="modal-actions">
+        <button class="btn-cancelar" (click)="cancelado.emit()" [disabled]="cargando">
+          {{ labelCancelar }}
+        </button>
+        <button class="btn-confirmar" (click)="confirmado.emit()" [disabled]="cargando">
+          {{ cargando ? 'Procesando...' : labelConfirmar }}
+        </button>
+      </div>
+    </div>
+  </div>
+}

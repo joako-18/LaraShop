@@ -1,21 +1,34 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-navbar',
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css'
 })
-export class NavbarComponent {
-  constructor(private router: Router) {}
+export class NavbarComponent implements OnInit {
 
-  onLogout() {
-    console.log('Cerrando sesión...');
-    // Aquí iría tu lógica de autenticación
+  nombre: string = '';
+  esAdmin: boolean = false;
+
+  constructor(
+    private router: Router,
+    private authService: AuthService
+  ) {}
+
+  ngOnInit(): void {
+    this.nombre = this.authService.getNombre();
+    this.esAdmin = this.authService.isAdmin();
   }
 
-  navigateTo(url: string, extras?: any) {
-    this.router.navigateByUrl(url, extras);
+  onLogout(): void {
+    this.authService.logout();
+  }
+
+  navigateTo(url: string): void {
+    this.router.navigateByUrl(url);
   }
 }

@@ -1,23 +1,57 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { Component, EventEmitter, Input, OnInit, OnDestroy, Output } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { NotificacionesService, NotificacionRead } from '../../../services/notificaciones.service';
+import { Subscription } from 'rxjs';
 
-import { ModalNotificacionComponent } from './modal-notificacion.component';
+@Component({
+  selector: 'app-modal-notificacion',
+  imports: [CommonModule],
+  templateUrl: './modal-notificacion.component.html',
+  styleUrl: './modal-notificacion.component.css'
+})
+export class ModalNotificacionComponent implements OnInit, OnDestroy {
 
-describe('ModalNotificacionComponent', () => {
-  let component: ModalNotificacionComponent;
-  let fixture: ComponentFixture<ModalNotificacionComponent>;
+  @Input() isOpen: boolean = false;
+  @Output() closed = new EventEmitter<void>();
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [ModalNotificacionComponent]
-    })
-    .compileComponents();
+  notificaciones: NotificacionRead[] = [];
+  private sub: Subscription | null = null;
 
-    fixture = TestBed.createComponent(ModalNotificacionComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+  constructor(private notificacionesService: NotificacionesService) {}
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-});
+  ngOnInit(): void {
+    this.cargarNotificaciones();
+
+    // Escuchar nuevas notificaciones en tiempo real
+    this.sub = this.notificacionesService.onNotificacion().subscribe(() => {
+      this.cargarNotificaciones();
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.sub?.unsubscribe();
+  }
+
+  cargarNotificaciones(): void {
+    this.notificacionesService.getAll().subscribe({
+      next: (notifs) => { this.notificaciones = notifs; },
+      error: () => {}
+    });
+  }
+
+  formatearTiempo(fecha: string): string {
+    const diff = Date.now() - new Date(fecha).getTime();
+    const minutos = Math.floor(diff / 60000);
+    if (minutos < 1) return 'ahora';
+    if (minutos < 60) return `hace ${minutos}min`;
+    const horas = Math.floor(minutos / 60);
+    if (horas < 24) return `hace ${horas}hrs`;
+    return `hace ${Math.floor(horas / 24)} días`;
+  }
+
+  onOverlayClick(event: MouseEvent): void {
+    if ((event.target as HTMLElement).classList.contains('notif-overlay')) {
+      this.closed.emit();
+    }
+  }
+}

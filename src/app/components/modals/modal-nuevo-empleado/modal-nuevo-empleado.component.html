@@ -1,1 +1,71 @@
-<p>modal-nuevo-empleado works!</p>
+@if (isOpen) {
+  <div class="modal-overlay" (click)="onOverlayClick($event)">
+    <div class="modal-box">
+      <h2 class="modal-title">{{ modoEdicion ? 'EDITAR EMPLEADO' : 'NUEVO EMPLEADO' }}</h2>
+
+      <div class="form-group">
+        <label>Nombre:</label>
+        <input type="text" class="modal-input" [(ngModel)]="form.nombre">
+      </div>
+
+      <div class="form-group">
+        <label>Correo:</label>
+        <input type="email" class="modal-input" [(ngModel)]="form.correo">
+      </div>
+
+      <div class="form-group">
+        <label>Teléfono:</label>
+        <input type="text" class="modal-input" [(ngModel)]="form.telefono">
+      </div>
+
+      <div class="form-group">
+        <label>
+          ID de Telegram
+          <span class="hint">(opcional — para notificaciones de stock)</span>
+        </label>
+        <input
+          type="text"
+          inputmode="numeric"
+          pattern="[0-9]*"
+          class="modal-input"
+          [(ngModel)]="form.id_telegram"
+          placeholder="Ej: 123456789">
+      </div>
+
+      <div class="form-group form-group-rol">
+        <label class="label-rol">Rol:</label>
+        <div class="radio-group">
+          <label class="radio-label">
+            <input type="radio" name="rol" value="administrador" [(ngModel)]="form.rol">
+            <span>Administrador</span>
+          </label>
+          <label class="radio-label">
+            <input type="radio" name="rol" value="empleado" [(ngModel)]="form.rol">
+            <span>Empleado</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>{{ modoEdicion ? 'Nueva contraseña (dejar vacío para no cambiar):' : 'Contraseña:' }}</label>
+        <input type="password" class="modal-input" [(ngModel)]="form.contrasena">
+      </div>
+
+      <div class="form-group">
+        <label>Confirma la contraseña:</label>
+        <input type="password" class="modal-input" [(ngModel)]="form.confirmarContrasena">
+      </div>
+
+      @if (errorMsg) {
+        <p class="error-msg">{{ errorMsg }}</p>
+      }
+
+      <div class="modal-actions">
+        <button class="btn-cancelar" (click)="cerrar()">CANCELAR</button>
+        <button class="btn-agregar" (click)="guardar()">
+          {{ modoEdicion ? 'Guardar Cambios' : 'Agregar Empleado' }}
+        </button>
+      </div>
+    </div>
+  </div>
+}

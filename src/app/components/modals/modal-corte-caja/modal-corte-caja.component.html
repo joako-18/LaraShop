@@ -1,1 +1,71 @@
-<p>modal-corte-caja works!</p>
+@if (isOpen) {
+  <div class="modal-overlay" (click)="onOverlayClick($event)">
+    <div class="modal-box">
+      <h2 class="modal-title">CORTE DE CAJA<br><span class="modal-date">{{ fechaHoy }}</span></h2>
+
+      @if (cargando) {
+        <p style="text-align:center; color:#aaa; font-style:italic;">Cargando datos del día...</p>
+      }
+
+      @if (!hayApertura && !cargando) {
+        <p style="text-align:center; color:#e74c3c; font-size:0.85rem; font-style:italic;">
+          No se registró apertura de caja hoy. El monto inicial se tomó del último corte.
+        </p>
+      }
+
+      <div class="form-group">
+        <label>Cantidad de ventas:</label>
+        <input type="text" [value]="cantidadVentas" class="modal-input short-input" readonly>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Efectivo inicial (saldo anterior):</label>
+          <input type="text" [value]="'$' + montoInicial.toFixed(2)" class="modal-input" readonly>
+        </div>
+        <div class="form-group">
+          <label>Efectivo final (Contado):</label>
+          <input type="text" class="modal-input" [(ngModel)]="efectivoContado" (input)="calcular()">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Observaciones:</label>
+        <textarea [(ngModel)]="observaciones" class="modal-textarea"></textarea>
+      </div>
+
+      <div class="resumen-box">
+        <p class="resumen-title">RESUMEN DEL CORTE</p>
+        <div class="resumen-row">
+          <span>Total de ventas:</span>
+          <strong>${{ totalVentas.toFixed(2) }}</strong>
+        </div>
+        <div class="resumen-row">
+          <span>Efectivo esperado:</span>
+          <strong>${{ efectivoEsperado.toFixed(2) }}</strong>
+        </div>
+        <div class="resumen-row">
+          <span>Efectivo contado:</span>
+          <strong>${{ (+efectivoContado || 0).toFixed(2) }}</strong>
+        </div>
+        <hr class="resumen-hr">
+        <div class="resumen-row diferencia-row">
+          <span>Diferencia:</span>
+          <strong class="diferencia-valor">${{ diferencia.toFixed(2) }}</strong>
+        </div>
+      </div>
+
+      @if (errorMsg) {
+        <p style="color:#e74c3c; font-size:0.85rem; text-align:center; font-style:italic;">{{ errorMsg }}</p>
+      }
+
+      <div class="modal-actions">
+        <button class="btn-cancelar" (click)="cerrar()">CANCELAR</button>
+        <button class="btn-finalizar" (click)="finalizar()" [disabled]="guardando || cargando">
+          {{ guardando ? 'Guardando...' : 'Finalizar Corte de Caja' }}
+        </button>
+      </div>
+
+    </div>
+  </div>
+}
