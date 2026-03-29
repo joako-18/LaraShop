@@ -34,14 +34,10 @@ export interface VentaRead {
   detalles: DetalleVentaRead[];
 }
 
-export interface ResumenDia {
-  cantidad_ventas: number;
-  total_ventas: number;
-}
-
 export interface CorteCajaCreate {
   id_empleado: number;
   monto_final: number;
+  fondo_siguiente_dia: number;
   observaciones?: string;
 }
 
@@ -52,7 +48,14 @@ export interface CorteCajaRead {
   monto_inicial: number;
   monto_final: number;
   ingresos_totales: number;
+  diferencia: number;
+  fondo_siguiente_dia: number;
   observaciones: string | null;
+}
+
+export interface AperturaCajaCreate {
+  id_empleado: number;
+  monto_apertura: number;
 }
 
 export interface AperturaCajaRead {
@@ -72,8 +75,9 @@ export interface ResumenDia {
 
 @Injectable({ providedIn: 'root' })
 export class VentasService {
-  private urlVentas = `${environment.apiUrl}/ventas`;
-  private urlCortes = `${environment.apiUrl}/cortes-caja`;
+  private urlVentas    = `${environment.apiUrl}/ventas`;
+  private urlCortes    = `${environment.apiUrl}/cortes-caja`;
+  private urlAperturas = `${environment.apiUrl}/aperturas-caja`;
 
   constructor(private http: HttpClient) {}
 
@@ -99,10 +103,6 @@ export class VentasService {
     return this.http.get<CorteCajaRead[]>(this.urlCortes + '/', { params });
   }
 
-  getCorteById(id: number): Observable<CorteCajaRead> {
-    return this.http.get<CorteCajaRead>(`${this.urlCortes}/${id}`);
-  }
-
   createCorte(corte: CorteCajaCreate): Observable<CorteCajaRead> {
     return this.http.post<CorteCajaRead>(this.urlCortes + '/', corte);
   }
@@ -110,8 +110,6 @@ export class VentasService {
   getResumenCorte(): Observable<ResumenDia> {
     return this.http.get<ResumenDia>(`${this.urlCortes}/resumen-dia`);
   }
-
-  private urlAperturas = `${environment.apiUrl}/aperturas-caja`;
 
   getAperturaActiva(): Observable<AperturaCajaRead | null> {
     return this.http.get<AperturaCajaRead | null>(`${this.urlAperturas}/activa`);
@@ -121,7 +119,7 @@ export class VentasService {
     return this.http.get<{ monto_sugerido: number }>(`${this.urlAperturas}/monto-sugerido`);
   }
 
-  createApertura(id_empleado: number, monto_apertura: number): Observable<AperturaCajaRead> {
-    return this.http.post<AperturaCajaRead>(this.urlAperturas + '/', { id_empleado, monto_apertura });
+  createApertura(data: AperturaCajaCreate): Observable<AperturaCajaRead> {
+    return this.http.post<AperturaCajaRead>(this.urlAperturas + '/', data);
   }
 }

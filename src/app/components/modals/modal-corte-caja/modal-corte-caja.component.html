@@ -1,71 +1,121 @@
 @if (isOpen) {
   <div class="modal-overlay" (click)="onOverlayClick($event)">
     <div class="modal-box">
-      <h2 class="modal-title">CORTE DE CAJA<br><span class="modal-date">{{ fechaHoy }}</span></h2>
+      <h2 class="modal-title">
+        CORTE DE CAJA<br>
+        <span class="modal-date">{{ fechaHoy }}</span>
+      </h2>
 
       @if (cargando) {
-        <p style="text-align:center; color:#aaa; font-style:italic;">Cargando datos del día...</p>
+        <p class="hint-text">Cargando datos del día...</p>
       }
 
       @if (!hayApertura && !cargando) {
-        <p style="text-align:center; color:#e74c3c; font-size:0.85rem; font-style:italic;">
-          No se registró apertura de caja hoy. El monto inicial se tomó del último corte.
+        <p class="aviso-sin-apertura">
+          ⚠️ No se registró apertura hoy. El monto inicial viene del último corte.
         </p>
       }
 
-      <div class="form-group">
-        <label>Cantidad de ventas:</label>
-        <input type="text" [value]="cantidadVentas" class="modal-input short-input" readonly>
-      </div>
-
-      <div class="form-row">
-        <div class="form-group">
-          <label>Efectivo inicial (saldo anterior):</label>
-          <input type="text" [value]="'$' + montoInicial.toFixed(2)" class="modal-input" readonly>
-        </div>
-        <div class="form-group">
-          <label>Efectivo final (Contado):</label>
-          <input type="text" class="modal-input" [(ngModel)]="efectivoContado" (input)="calcular()">
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label>Observaciones:</label>
-        <textarea [(ngModel)]="observaciones" class="modal-textarea"></textarea>
-      </div>
-
+      <!-- RESUMEN DEL DÍA -->
       <div class="resumen-box">
-        <p class="resumen-title">RESUMEN DEL CORTE</p>
+        <p class="resumen-title">RESUMEN DEL DÍA</p>
         <div class="resumen-row">
-          <span>Total de ventas:</span>
+          <span>Ventas realizadas:</span>
+          <strong>{{ cantidadVentas }}</strong>
+        </div>
+        <div class="resumen-row">
+          <span>Monto inicial (apertura):</span>
+          <strong>${{ montoInicial.toFixed(2) }}</strong>
+        </div>
+        <div class="resumen-row">
+          <span>Total vendido:</span>
           <strong>${{ totalVentas.toFixed(2) }}</strong>
         </div>
-        <div class="resumen-row">
-          <span>Efectivo esperado:</span>
+        <div class="resumen-row resumen-esperado">
+          <span>Efectivo esperado en caja:</span>
           <strong>${{ efectivoEsperado.toFixed(2) }}</strong>
         </div>
-        <div class="resumen-row">
-          <span>Efectivo contado:</span>
-          <strong>${{ (+efectivoContado || 0).toFixed(2) }}</strong>
+      </div>
+
+      <!-- PASO 1: efectivo contado -->
+      <div class="form-group">
+        <label>① Efectivo físico contado:</label>
+        <input
+          type="number"
+          class="modal-input"
+          [(ngModel)]="efectivoContado"
+          placeholder="0.00"
+          min="0"
+          step="0.01">
+      </div>
+
+      <!-- Diferencia automática -->
+      @if (efectivoContado !== null) {
+        <div class="diferencia-box"
+          [class.positiva]="diferencia >= 0"
+          [class.negativa]="diferencia < 0">
+          <span>Diferencia (contado − esperado):</span>
+          <strong>{{ diferencia >= 0 ? '+' : '' }}${{ diferencia.toFixed(2) }}</strong>
         </div>
-        <hr class="resumen-hr">
-        <div class="resumen-row diferencia-row">
-          <span>Diferencia:</span>
-          <strong class="diferencia-valor">${{ diferencia.toFixed(2) }}</strong>
+      }
+
+      <!-- PASO 2: fondo para mañana -->
+      <div class="form-group">
+        <label>② Fondo que deja para mañana:</label>
+        <input
+          type="number"
+          class="modal-input"
+          [(ngModel)]="fondoSiguienteDia"
+          placeholder="0.00"
+          min="0"
+          [max]="contado"
+          step="0.01">
+        <span class="input-hint">Este monto quedará en caja. El resto se retira.</span>
+      </div>
+
+      <!-- Resumen de retiro -->
+      @if (efectivoContado !== null && fondoSiguienteDia !== null) {
+        <div class="retiro-box">
+          <div class="resumen-row">
+            <span>Efectivo contado:</span>
+            <strong>${{ contado.toFixed(2) }}</strong>
+          </div>
+          <div class="resumen-row">
+            <span>Fondo que queda:</span>
+            <strong>${{ fondo.toFixed(2) }}</strong>
+          </div>
+          <hr class="resumen-hr">
+          <div class="resumen-row retiro-row">
+            <span>💰 Monto a retirar:</span>
+            <strong>${{ montoARetirar.toFixed(2) }}</strong>
+          </div>
         </div>
+      }
+
+      <!-- Observaciones -->
+      <div class="form-group">
+        <label>Observaciones (opcional):</label>
+        <textarea
+          class="modal-textarea"
+          [(ngModel)]="observaciones"
+          rows="2"
+          placeholder="Ej: Diferencia por billete falso...">
+        </textarea>
       </div>
 
       @if (errorMsg) {
-        <p style="color:#e74c3c; font-size:0.85rem; text-align:center; font-style:italic;">{{ errorMsg }}</p>
+        <p class="error-msg">{{ errorMsg }}</p>
       }
 
       <div class="modal-actions">
         <button class="btn-cancelar" (click)="cerrar()">CANCELAR</button>
-        <button class="btn-finalizar" (click)="finalizar()" [disabled]="guardando || cargando">
-          {{ guardando ? 'Guardando...' : 'Finalizar Corte de Caja' }}
+        <button
+          class="btn-finalizar"
+          (click)="finalizar()"
+          [disabled]="guardando || cargando">
+          {{ guardando ? 'Guardando...' : 'Finalizar Corte' }}
         </button>
       </div>
-
     </div>
   </div>
 }

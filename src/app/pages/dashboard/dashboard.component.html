@@ -1,9 +1,37 @@
 <div class="dashboard-grid">
   <app-navbar></app-navbar>
-  <main class="main-content">
-    <app-carrito-venta></app-carrito-venta>
-  </main>
-  <aside class="details-panel">
-    <app-detalle-venta></app-detalle-venta>
-  </aside>
+
+  @if (verificando) {
+    <main class="main-content main-loading">
+      <p class="loading-text">Verificando estado de caja...</p>
+    </main>
+  }
+
+  @if (!verificando && aperturaActiva) {
+    <main class="main-content">
+      <app-carrito-venta></app-carrito-venta>
+    </main>
+    <aside class="details-panel">
+      <app-detalle-venta></app-detalle-venta>
+    </aside>
+  }
+
+  @if (!verificando && !aperturaActiva) {
+    <main class="main-content main-bloqueado">
+      <div class="bloqueo-box">
+        <img src="assets/carrito-venta.svg" alt="caja" class="bloqueo-icon">
+        <h2>Caja no abierta</h2>
+        <p>Debes registrar la apertura de caja para comenzar a vender.</p>
+        <button class="btn-abrir-caja" (click)="modalAperturaAbierto = true">
+          Registrar Apertura
+        </button>
+      </div>
+    </main>
+  }
 </div>
+
+<!-- Modal de apertura — sin overlay clickeable para forzar el registro -->
+<app-modal-apertura-caja
+  [isOpen]="modalAperturaAbierto"
+  (abierta)="onAperturaRegistrada()">
+</app-modal-apertura-caja>
