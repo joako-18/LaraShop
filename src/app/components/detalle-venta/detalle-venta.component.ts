@@ -8,6 +8,7 @@ import { ModalExitoVentaComponent } from '../modals/modal-exito-venta/modal-exit
 import { VentasService, VentaRead } from '../../services/ventas.service';
 import { AuthService } from '../../services/auth.service';
 import { CarritoEstadoService, ItemCarrito } from '../../services/carrito-estado.service';
+import { ImpresoraService, DatosTicket } from '../../services/impresora.service';
 
 @Component({
   selector: 'app-detalle-venta',
@@ -22,32 +23,33 @@ import { CarritoEstadoService, ItemCarrito } from '../../services/carrito-estado
 })
 export class DetalleVentaComponent implements OnInit, OnDestroy {
 
-  modalCorteCajaAbierto: boolean = false;
-  modalConfirmacionAbierto: boolean = false;
-  modalExitoAbierto: boolean = false;
+  modalCorteCajaAbierto    = false;
+  modalConfirmacionAbierto = false;
+  modalExitoAbierto        = false;
 
   ultimaVenta: VentaRead | null = null;
-  cantidadRecibida: string = '';
-  cargando: boolean = false;
-  procesando: boolean = false;
+  cantidadRecibida = '';
+  cargando  = false;
+  procesando = false;
 
-  totalUltimaVenta: number = 0;
-  cambioUltimaVenta: number = 0;
+  totalUltimaVenta  = 0;
+  cambioUltimaVenta = 0;
 
-  carrito$!: Observable<ItemCarrito[]>;
+  carrito$!:     Observable<ItemCarrito[]>;
   ventaExitosa$!: Observable<boolean>;
-  finalizando$!: Observable<boolean>;
+  finalizando$!:  Observable<boolean>;
 
   private sub = new Subscription();
 
   constructor(
-    private ventasService: VentasService,
-    private authService: AuthService,
-    private carritoEstado: CarritoEstadoService
+    private ventasService:   VentasService,
+    private authService:     AuthService,
+    private carritoEstado:   CarritoEstadoService,
+    private impresoraService: ImpresoraService
   ) {
-    this.carrito$ = this.carritoEstado.carrito$;
+    this.carrito$      = this.carritoEstado.carrito$;
     this.ventaExitosa$ = this.carritoEstado.ventaExitosa$;
-    this.finalizando$ = this.carritoEstado.finalizando$;
+    this.finalizando$  = this.carritoEstado.finalizando$;
   }
 
   ngOnInit(): void {
@@ -74,8 +76,8 @@ export class DetalleVentaComponent implements OnInit, OnDestroy {
 
   get cambio(): number {
     const recibido = parseFloat(this.cantidadRecibida) || 0;
-    const total = this.carritoEstado.total;
-    return recibido >= total ? recibido - total : 0;
+    const total    = this.carritoEstado.total;
+    return recibido >= total ? parseFloat((recibido - total).toFixed(2)) : 0;
   }
 
   get fechaHoy(): string {
@@ -104,11 +106,10 @@ export class DetalleVentaComponent implements OnInit, OnDestroy {
   }
 
   get resumenParaConfirmacion(): string {
-    const carrito = this.carritoEstado.carrito;
-    const total = this.carritoEstado.total;
+    const total    = this.carritoEstado.total;
     const recibido = parseFloat(this.cantidadRecibida) || 0;
-    const cambio = recibido - total;
-    const items = carrito.length;
+    const cambio   = recibido - total;
+    const items    = this.carritoEstado.carrito.length;
     return `${items} producto${items !== 1 ? 's' : ''} · Total: $${total.toFixed(2)} · Cambio: $${cambio.toFixed(2)}`;
   }
 
@@ -118,33 +119,61 @@ export class DetalleVentaComponent implements OnInit, OnDestroy {
   }
 
   confirmarVenta(): void {
-    const carrito = this.carritoEstado.carrito;
+    const carrito       = this.carritoEstado.carrito;
     if (carrito.length === 0) return;
 
-    const idEmpleado = this.authService.getIdEmpleado();
+    const idEmpleado    = this.authService.getIdEmpleado();
     const montoRecibido = parseFloat(this.cantidadRecibida);
-    const total = this.carritoEstado.total;
+    const total         = this.carritoEstado.total;
+    const cambio        = parseFloat((montoRecibido - total).toFixed(2));
 
     this.procesando = true;
     this.carritoEstado.setFinalizando(true);
     this.modalConfirmacionAbierto = false;
 
     this.ventasService.create({
-      id_empleado: idEmpleado,
+      id_empleado:    idEmpleado,
       monto_recibido: montoRecibido,
       detalles: carrito.map(i => ({
-        id_producto: i.producto.id_producto,
-        cantidad: i.cantidad,
+        id_producto:  i.producto.id_producto,
+        cantidad:     i.cantidad,
         id_descuento: i.id_descuento ?? null
       }))
     }).subscribe({
-      next: () => {
+      next: (venta) => {
         this.procesando = false;
         this.carritoEstado.setFinalizando(false);
         this.carritoEstado.setVentaExitosa(true);
 
-        this.totalUltimaVenta = total;
-        this.cambioUltimaVenta = montoRecibido - total;
+        this.totalUltimaVenta  = total;
+        this.cambioUltimaVenta = cambio;
+
+        const fechaVenta = new Date(venta.fecha);
+        const fechaStr = fechaVenta.toLocaleString('es-MX', {
+          day:    '2-digit',
+          month:  '2-digit',
+          year:   '2-digit',
+          hour:   '2-digit',
+          minute: '2-digit',
+          hour12: false
+        }).replace(',', '');
+
+        const datosTicket: DatosTicket = {
+          idVenta:        venta.id_venta,
+          fecha:          fechaStr,
+          empleado:       this.authService.getNombre(),
+          items:          carrito,
+          subTotal:       total,
+          descuento:      0,
+          iva:            0,
+          total:          total,
+          montoRecibido:  montoRecibido,
+          cambio:         cambio
+        };
+
+        this.sub.add(
+          this.impresoraService.imprimirTicket(datosTicket).subscribe()
+        );
 
         this.carritoEstado.vaciar();
         this.modalExitoAbierto = true;
@@ -158,8 +187,8 @@ export class DetalleVentaComponent implements OnInit, OnDestroy {
   }
 
   onExitoCerrado(): void {
-    this.modalExitoAbierto = false;
-    this.cantidadRecibida = '';
+    this.modalExitoAbierto   = false;
+    this.cantidadRecibida    = '';
     this.carritoEstado.setVentaExitosa(false);
   }
 
