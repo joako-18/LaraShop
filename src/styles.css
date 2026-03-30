@@ -1,7 +1,8 @@
 :root {
-    --primary-color: #F2A0CD;
-    --secondary-color: #D962A3;
-    --background-color: #FFFFFF;
+  --primary-color: #F2A0CD;
+  --secondary-color: #D962A3;
+  --background-color: #FFFFFF;
+  --sidebar-width: 200px;
 }
 
 body, html {
@@ -13,4 +14,5 @@ body, html {
   box-sizing: border-box;
   background-color: var(--background-color);
   overflow-x: hidden;
+  font-size: 14px;
 }

@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 
 .sidebar {
-  width: 280px;
+  width: var(--sidebar-width);
   height: 100vh;
   background-color: var(--secondary-color);
   color: #ffffff;
@@ -10,18 +10,16 @@
   position: fixed;
   left: 0;
   top: 0;
-  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 2px 0 10px rgba(0,0,0,0.1);
   font-family: "Inter", sans-serif;
 }
 
 .sidebar-logo {
-  padding: 40px 20px;
+  padding: 24px 16px 20px;
   text-align: center;
 }
 
-.sidebar-logo img {
-  width: 130px;
-}
+.sidebar-logo img { width: 100px; }
 
 .sidebar-menu {
   list-style: none;
@@ -34,52 +32,55 @@
   display: flex;
   align-items: center;
   transition: background 0.3s;
-  padding-left: 25px;
+  padding-left: 18px;
 }
 
 .sidebar-menu li:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(255,255,255,0.1);
 }
 
 .sidebar-menu img {
-  width: 35px;
+  width: 26px;
   height: auto;
-  margin-right: 15px;
+  margin-right: 12px;
 }
 
 .sidebar-menu li a {
   display: flex;
   align-items: center;
-  padding: 15px 0;
+  padding: 12px 0;
   color: #ffffff;
   text-decoration: none;
-  font-size: 1.4rem;
+  font-size: 1.1rem;
   font-weight: 800;
   font-style: italic;
   width: 100%;
 }
 
 .sidebar-footer {
-  padding: 15px 0;
-  border-top: 2px solid rgba(255, 255, 255, 0.3);
-  margin-bottom: 20px;
+  padding: 12px 0;
+  border-top: 2px solid rgba(255,255,255,0.3);
+  margin-bottom: 14px;
 }
 
-.user-profile, .logout-action a {
+.user-profile,
+.logout-action a {
   display: flex;
   align-items: center;
-  padding: 12px 30px;
-  font-size: 1.3rem;
+  padding: 10px 22px;
+  font-size: 1rem;
   font-weight: bold;
   font-style: italic;
   color: #ffffff;
   text-decoration: none;
+  word-break: break-word;
 }
 
 .sidebar-footer img {
-  width: 28px;
+  width: 22px;
   height: auto;
-  margin-right: 15px;
+  margin-right: 12px;
+  flex-shrink: 0;
 }
 
 .logout-action a {
@@ -88,5 +89,5 @@
 }
 
 .logout-action a:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(255,255,255,0.1);
 }

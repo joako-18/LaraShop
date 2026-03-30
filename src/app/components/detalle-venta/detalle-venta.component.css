@@ -13,51 +13,45 @@
   justify-content: center;
   align-items: center;
   width: 100%;
-  padding: 10px 0 16px;
+  padding: 6px 0 10px;
 }
 
-.side-logo {
-  height: 220px;
-  width: auto;
-}
+.side-logo { height: 140px; width: auto; }
 
 .btn-corte {
   width: 100%;
-  padding: 14px;
+  padding: 10px;
   background: var(--secondary-color);
   color: white;
   border: none;
-  border-radius: 10px;
+  border-radius: 8px;
   font-weight: 800;
-  margin-bottom: 18px;
+  margin-bottom: 12px;
   cursor: pointer;
   font-family: "Inter", sans-serif;
   font-style: italic;
-  font-size: 17px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  font-size: 0.9rem;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.18);
   transition: background 0.2s;
-  letter-spacing: 0.5px;
 }
 
-.btn-corte:hover {
-  background: #c9559a;
-}
+.btn-corte:hover { background: #c9559a; }
 
 .sale-summary {
   width: 100%;
-  border-radius: 15px;
-  padding: 22px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-  border: solid 1px rgba(147, 147, 147, 0.2);
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 3px 14px rgba(0,0,0,0.07);
+  border: 1px solid rgba(147,147,147,0.2);
   background: #fff;
   box-sizing: border-box;
 }
 
 .sale-summary h2 {
   color: var(--secondary-color);
-  font-size: 1.15rem;
+  font-size: 0.95rem;
   font-style: italic;
-  margin: 0 0 16px 0;
+  margin: 0 0 12px;
   font-weight: 800;
   text-align: center;
 }
@@ -65,13 +59,13 @@
 .info-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  margin-bottom: 14px;
+  gap: 8px;
+  margin-bottom: 10px;
 }
 
 .info-item label {
   display: block;
-  font-size: 0.75rem;
+  font-size: 0.68rem;
   color: #999;
   font-style: italic;
 }
@@ -80,127 +74,116 @@
   font-style: italic;
   font-weight: 800;
   color: #6B6B6B;
-  font-size: 0.88rem;
+  font-size: 0.78rem;
 }
 
-.full-width {
-  grid-column: span 2;
-}
+.full-width { grid-column: span 2; }
 
 hr {
   border: none;
   border-top: 0.5px solid #eee;
-  margin: 12px 0;
+  margin: 8px 0;
 }
 
-.input-field {
-  margin-bottom: 10px;
-}
+.input-field { margin-bottom: 8px; }
 
 .input-field label {
-  font-size: 0.75rem;
+  font-size: 0.68rem;
   color: #999;
   font-style: italic;
-  margin-bottom: 4px;
+  margin-bottom: 3px;
   display: block;
 }
 
 .summary-input {
   width: 100%;
-  padding: 8px 10px;
+  padding: 7px 9px;
   border: 1px solid #ddd;
   border-radius: 5px;
   box-shadow: inset 1px 1px 3px rgba(0,0,0,0.05);
   box-sizing: border-box;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   font-family: 'Inter', sans-serif;
   outline: none;
-  -webkit-appearance: none;
   appearance: none;
 }
 
-.summary-input:focus {
-  border-color: var(--secondary-color);
-}
+.summary-input:focus { border-color: var(--secondary-color); }
 
 .totals-table {
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
 }
 
 .total-row {
   display: flex;
   justify-content: space-between;
   color: #666;
-  font-size: 0.88rem;
+  font-size: 0.82rem;
 }
 
-.total-row strong {
-  color: #666;
-}
+.total-row strong { color: #666; }
 
 .total-final {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 14px;
+  margin-top: 10px;
   border-top: 2px solid #eee;
-  padding-top: 14px;
+  padding-top: 10px;
 }
 
 .total-final span {
   font-weight: 900;
   color: #6B6B6B;
-  font-size: 1rem;
+  font-size: 0.9rem;
 }
 
 .final-price {
   color: var(--secondary-color);
-  font-size: 1.4rem;
+  font-size: 1.2rem;
   font-weight: 800;
 }
 
 .cambio-field {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  margin-bottom: 12px;
+  gap: 3px;
+  margin-bottom: 8px;
 }
 
 .cambio-field label {
-  font-size: 0.75rem;
+  font-size: 0.68rem;
   color: #999;
   font-style: italic;
 }
 
 .cambio-valor {
-  font-size: 1.1rem;
+  font-size: 0.95rem;
   font-weight: 800;
   color: #aaa;
   font-style: italic;
-  padding: 4px 0;
+  padding: 3px 0;
 }
 
-.cambio-valor.positivo {
-  color: #27ae60;
-}
+.cambio-valor.positivo { color: #27ae60; }
 
 .btn-finalizar-venta {
   width: 100%;
-  padding: 15px;
-  margin-top: 18px;
+  padding: 12px;
+  margin-top: 12px;
   border: none;
   background: var(--secondary-color);
   color: white;
-  border-radius: 12px;
+  border-radius: 10px;
   font-weight: 900;
   font-style: italic;
-  font-size: 1.1rem;
+  font-size: 0.95rem;
   cursor: pointer;
   font-family: 'Inter', sans-serif;
-  box-shadow: 0 4px 14px rgba(0,0,0,0.18);
+  box-shadow: 0 3px 10px rgba(0,0,0,0.16);
   transition: background 0.2s, transform 0.15s, opacity 0.2s;
 }
 

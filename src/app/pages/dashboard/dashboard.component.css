@@ -2,21 +2,78 @@
 
 .dashboard-grid {
   display: grid;
-  grid-template-columns: 280px 1fr 400px;
+  grid-template-columns: var(--sidebar-width) 1fr 320px;
   height: 100vh;
   font-family: "Inter", sans-serif;
   overflow: hidden;
 }
 
 .main-content {
-  padding: 20px;
+  padding: 14px;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
 }
 
 .details-panel {
-  padding: 20px;
+  padding: 14px;
   overflow-y: auto;
   background: #f5f5f5;
 }
+
+.main-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loading-text {
+  color: #aaa;
+  font-style: italic;
+  font-size: 0.9rem;
+}
+
+.main-bloqueado {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bloqueo-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  text-align: center;
+}
+
+.bloqueo-icon { width: 60px; height: auto; opacity: 0.4; }
+
+.bloqueo-box h2 {
+  color: #555;
+  font-size: 1.3rem;
+  font-style: italic;
+  margin: 0;
+}
+
+.bloqueo-box p {
+  color: #888;
+  font-size: 0.88rem;
+  margin: 0;
+}
+
+.btn-abrir-caja {
+  background: var(--secondary-color);
+  color: #fff;
+  border: none;
+  padding: 10px 24px;
+  border-radius: 10px;
+  font-weight: 800;
+  font-style: italic;
+  font-size: 0.9rem;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  transition: background 0.2s;
+}
+
+.btn-abrir-caja:hover { background: #c9559a; }

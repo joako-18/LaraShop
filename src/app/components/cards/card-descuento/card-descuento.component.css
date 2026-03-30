@@ -1,144 +1,165 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 
+.proveedores-wrapper,
+.empleados-wrapper,
 .descuentos-wrapper {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 14px;
   font-family: 'Inter', sans-serif;
-  padding: 10px 0;
+  padding: 6px 0;
 }
 
 .top-bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
+  gap: 12px;
 }
 
 .search-input {
-  width: 380px;
-  padding: 11px 18px;
+  flex: 1;
+  min-width: 0;
+  padding: 9px 14px;
   border: 1px solid #ddd;
-  border-radius: 10px;
-  font-size: 0.9rem;
+  border-radius: 8px;
+  font-size: 0.83rem;
   font-family: 'Inter', sans-serif;
   outline: none;
   box-shadow: inset 1px 1px 3px rgba(0,0,0,0.05);
   transition: border-color 0.2s;
 }
 
-.search-input:focus {
-  border-color: var(--secondary-color);
-}
+.search-input:focus { border-color: var(--secondary-color); }
 
 .btn-nuevo {
   background: var(--secondary-color);
   color: #fff;
   border: none;
-  padding: 12px 24px;
-  border-radius: 10px;
+  padding: 9px 18px;
+  border-radius: 8px;
   font-weight: 800;
   font-style: italic;
-  font-size: 1rem;
+  font-size: 0.85rem;
   cursor: pointer;
   font-family: 'Inter', sans-serif;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-  transition: background 0.2s, transform 0.15s;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.13);
+  transition: background 0.2s;
   white-space: nowrap;
+  flex-shrink: 0;
 }
 
-.btn-nuevo:hover {
-  background: #c9559a;
-  transform: translateY(-1px);
-}
+.btn-nuevo:hover { background: #c9559a; }
 
+.proveedores-list,
+.empleados-list,
 .descuentos-list {
   background: #fff;
   border: 1px solid rgba(147,147,147,0.2);
-  border-radius: 14px;
-  padding: 10px 20px;
+  border-radius: 12px;
+  padding: 6px 14px;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
 
+.proveedor-card,
+.empleado-card,
 .descuento-card {
   display: flex;
   align-items: center;
-  gap: 20px;
-  padding: 20px 16px;
+  gap: 12px;
+  padding: 14px 10px;
   border-bottom: 1px solid #f5f5f5;
   transition: background 0.15s;
+  flex-wrap: nowrap;
 }
 
+.proveedor-card:last-child,
+.empleado-card:last-child,
 .descuento-card:last-child {
   border-bottom: none;
 }
 
+.proveedor-card:hover,
+.empleado-card:hover,
 .descuento-card:hover {
   background: rgba(242,160,205,0.04);
 }
 
+.proveedor-icon,
+.empleado-icon,
 .descuento-icon {
-  width: 48px;
+  width: 40px;
   height: auto;
   flex-shrink: 0;
 }
 
+.proveedor-info,
+.empleado-info,
 .descuento-info {
   display: flex;
   flex-direction: column;
-  gap: 2px;
-  min-width: 160px;
+  gap: 1px;
+  min-width: 120px;
+  flex: 1;
 }
 
+.proveedor-nombre,
+.empleado-nombre,
 .descuento-nombre {
   font-weight: 800;
   font-style: italic;
   color: #444;
-  font-size: 1rem;
+  font-size: 0.88rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.descuento-valor {
-  font-size: 0.85rem;
-  color: #777;
-  font-style: italic;
+.proveedor-email,
+.empleado-email {
+  font-size: 0.75rem;
+  color: var(--secondary-color);
+  text-decoration: underline;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.proveedor-tel,
+.proveedor-productos,
+.empleado-rol,
+.descuento-valor,
+.descuento-fechas span {
+  color: #555;
+  font-weight: 700;
+  font-size: 0.82rem;
+  white-space: nowrap;
 }
 
 .descuento-fechas {
   display: flex;
   flex-direction: column;
-  gap: 2px;
-  min-width: 160px;
-}
-
-.descuento-fechas span {
-  font-size: 0.88rem;
-  font-weight: 700;
-  font-style: italic;
-  color: #555;
-}
-
-.categoria-badge {
-  border: 1px solid #ddd;
-  color: #666;
-  padding: 5px 16px;
-  border-radius: 20px;
-  font-size: 0.82rem;
-  font-weight: 600;
-  background: #fff;
+  gap: 1px;
+  min-width: 120px;
 }
 
 .estado-badge {
-  padding: 6px 18px;
-  border-radius: 20px;
-  font-size: 0.85rem;
-  font-weight: 700;
-  text-align: center;
-  min-width: 90px;
   background: var(--secondary-color);
   color: #fff;
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  min-width: 66px;
+  text-align: center;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
+
+.estado-badge.inactivo { background: #aaa; }
 
 .estado-badge.programado {
   background: rgba(242,160,205,0.5);
@@ -151,15 +172,29 @@
   border: 1px solid #ddd;
 }
 
-.acciones {
-  display: flex;
-  gap: 10px;
-  margin-left: auto;
+.categoria-badge {
+  border: 1px solid #ddd;
+  color: #666;
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: #fff;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
-.btn-accion {
-  width: 40px;
-  height: 40px;
+.acciones {
+  display: flex;
+  gap: 7px;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.btn-accion,
+.btn-historial {
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
   border: 1px solid rgba(242,160,205,0.5);
   background: #fff;
@@ -167,10 +202,11 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: background 0.2s, border-color 0.2s;
+  transition: background 0.2s;
 }
 
-.btn-accion:hover {
+.btn-accion:hover,
+.btn-historial:hover {
   background: rgba(242,160,205,0.15);
   border-color: var(--secondary-color);
 }
@@ -180,14 +216,16 @@
   border-color: #e74c3c;
 }
 
-.btn-accion img {
-  width: 18px;
+.btn-accion img,
+.btn-historial img {
+  width: 15px;
   height: auto;
 }
 
 .empty-state {
   text-align: center;
-  padding: 40px;
+  padding: 30px;
   color: #aaa;
   font-style: italic;
+  font-size: 0.85rem;
 }
