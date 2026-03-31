@@ -1,0 +1,58 @@
+<div class="categorias-wrapper">
+
+  <div class="top-bar">
+    <input
+      type="text"
+      class="search-input"
+      placeholder="Buscar categoría..."
+      [(ngModel)]="searchTerm">
+    <button class="btn-nuevo" (click)="modalAbierto = true">
+      + Nueva Categoría
+    </button>
+  </div>
+
+  @if (errorMsg) {
+    <p style="color:#e74c3c; font-style:italic; font-size:0.88rem; text-align:center;">
+      {{ errorMsg }}
+    </p>
+  }
+  @if (cargando) {
+    <p style="color:#aaa; font-style:italic; text-align:center;">Cargando categorías...</p>
+  }
+
+  <div class="categorias-grid">
+    @let lista = (categoriasFiltradas$ | async) ?? [];
+    @if (lista.length === 0 && !cargando) {
+      <div class="empty-state">
+        <p>No se encontraron categorías</p>
+      </div>
+    }
+    @for (categoria of lista; track categoria.id_categoria) {
+      <div class="categoria-card">
+        <div class="categoria-icon-wrap">
+          <span class="categoria-letra">{{ categoria.nombre.charAt(0).toUpperCase() }}</span>
+        </div>
+        <div class="categoria-info">
+          <span class="categoria-nombre">{{ categoria.nombre }}</span>
+          <span class="categoria-id">ID: {{ categoria.id_categoria }}</span>
+        </div>
+        <div class="acciones">
+          <button class="btn-accion" (click)="editarCategoria(categoria)">
+            <img src="assets/editar.svg" alt="editar">
+          </button>
+          <button class="btn-accion eliminar" (click)="eliminarCategoria(categoria.id_categoria)">
+            <img src="assets/eliminar.svg" alt="eliminar">
+          </button>
+        </div>
+      </div>
+    }
+  </div>
+
+</div>
+
+<app-modal-nueva-categoria
+  [isOpen]="modalAbierto"
+  [categoriaEditar]="categoriaEditar"
+  (closed)="onModalClosed()"
+  (guardado)="onCategoriaGuardada($event)">
+</app-modal-nueva-categoria>

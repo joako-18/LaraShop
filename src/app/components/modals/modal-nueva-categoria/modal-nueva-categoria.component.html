@@ -1,0 +1,26 @@
+@if (isOpen) {
+  <div class="modal-overlay" (click)="onOverlayClick($event)">
+    <div class="modal-box">
+      <h2 class="modal-title">
+        {{ modoEdicion ? 'EDITAR CATEGORÍA' : 'NUEVA CATEGORÍA' }}
+      </h2>
+      <div class="form-group">
+        <label>Nombre:</label>
+        <input
+          type="text"
+          class="modal-input"
+          [(ngModel)]="form.nombre"
+          placeholder="Ej: Ropa, Calzado, Accesorios...">
+      </div>
+      @if (errorMsg) {
+        <p class="error-msg">{{ errorMsg }}</p>
+      }
+      <div class="modal-actions">
+        <button class="btn-cancelar" (click)="cerrar()">CANCELAR</button>
+        <button class="btn-agregar" (click)="guardar()">
+          {{ modoEdicion ? 'Guardar Cambios' : 'Agregar Categoría' }}
+        </button>
+      </div>
+    </div>
+  </div>
+}

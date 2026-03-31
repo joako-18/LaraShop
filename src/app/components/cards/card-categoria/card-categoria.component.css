@@ -1,0 +1,163 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+.categorias-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  font-family: 'Inter', sans-serif;
+  padding: 6px 0;
+}
+
+.top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.search-input {
+  flex: 1;
+  min-width: 0;
+  padding: 9px 14px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 0.83rem;
+  font-family: 'Inter', sans-serif;
+  outline: none;
+  box-shadow: inset 1px 1px 3px rgba(0,0,0,0.05);
+  transition: border-color 0.2s;
+}
+
+.search-input:focus { border-color: var(--secondary-color); }
+
+.btn-nuevo {
+  background: var(--secondary-color);
+  color: #fff;
+  border: none;
+  padding: 9px 18px;
+  border-radius: 8px;
+  font-weight: 800;
+  font-style: italic;
+  font-size: 0.85rem;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.13);
+  transition: background 0.2s, transform 0.15s;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.btn-nuevo:hover {
+  background: #c9559a;
+  transform: translateY(-1px);
+}
+
+/* Lista de categorías — igual que proveedores/empleados */
+.categorias-grid {
+  background: #fff;
+  border: 1px solid rgba(147,147,147,0.2);
+  border-radius: 12px;
+  padding: 6px 14px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+/* Card individual — fila full width */
+.categoria-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 10px;
+  border-bottom: 1px solid #f5f5f5;
+  transition: background 0.15s;
+}
+
+.categoria-card:last-child { border-bottom: none; }
+
+.categoria-card:hover { background: rgba(242,160,205,0.04); }
+
+/* Icono con letra inicial */
+.categoria-icon-wrap {
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 3px 8px rgba(217,98,163,0.22);
+}
+
+.categoria-letra {
+  color: #fff;
+  font-weight: 900;
+  font-size: 1.2rem;
+  font-style: italic;
+  line-height: 1;
+}
+
+/* Info */
+.categoria-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.categoria-nombre {
+  font-weight: 800;
+  font-style: italic;
+  color: #444;
+  font-size: 0.95rem;
+}
+
+.categoria-id {
+  font-size: 0.72rem;
+  color: #bbb;
+  font-style: italic;
+}
+
+/* Acciones */
+.acciones {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+.btn-accion {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid rgba(242,160,205,0.5);
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.btn-accion:hover {
+  background: rgba(242,160,205,0.15);
+  border-color: var(--secondary-color);
+}
+
+.btn-accion.eliminar:hover {
+  background: #fff0f0;
+  border-color: #e74c3c;
+}
+
+.btn-accion img { width: 15px; height: auto; }
+
+/* Empty state */
+.empty-state {
+  text-align: center;
+  padding: 40px;
+  color: #aaa;
+  font-style: italic;
+  font-size: 0.88rem;
+}

@@ -4,6 +4,7 @@ import { map } from 'rxjs/operators';
 import { ProveedorRead } from './proveedores.service';
 import { EmpleadoRead } from './empleados.service';
 import { DescuentoRead } from './descuentos.service';
+import { CategoriaRead } from './categorias.service';
 import { ResumenEstadisticas } from './estadisticas.service';
 
 @Injectable({ providedIn: 'root' })
@@ -43,6 +44,19 @@ export class AdminEstadoService {
   }
   eliminarDescuento(id: number): void {
     this._descuentos$.next(this._descuentos$.value.filter(x => x.id_descuento !== id));
+  }
+
+  // ── Categorías ────────────────────────────────────────────────────────────
+  private _categorias$ = new BehaviorSubject<CategoriaRead[]>([]);
+  readonly categorias$ = this._categorias$.asObservable();
+
+  setCategorias(c: CategoriaRead[]): void { this._categorias$.next(c); }
+  agregarCategoria(c: CategoriaRead): void { this._categorias$.next([...this._categorias$.value, c]); }
+  actualizarCategoria(c: CategoriaRead): void {
+    this._categorias$.next(this._categorias$.value.map(x => x.id_categoria === c.id_categoria ? c : x));
+  }
+  eliminarCategoria(id: number): void {
+    this._categorias$.next(this._categorias$.value.filter(x => x.id_categoria !== id));
   }
 
   private _estadisticas$ = new BehaviorSubject<ResumenEstadisticas | null>(null);

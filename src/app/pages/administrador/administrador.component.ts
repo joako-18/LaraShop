@@ -1,11 +1,12 @@
 import { Component, OnInit, AfterViewChecked, OnDestroy, NgZone } from '@angular/core';
 import { CommonModule, AsyncPipe } from '@angular/common';
-import { Observable, Subject, Subscription} from 'rxjs';
-import { takeUntil, filter } from 'rxjs/operators';
+import { Subject, Observable } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { CardProveedorComponent } from '../../components/cards/card-proveedor/card-proveedor.component';
 import { CardEmpleadoComponent } from '../../components/cards/card-empleado/card-empleado.component';
 import { CardDescuentoComponent } from '../../components/cards/card-descuento/card-descuento.component';
+import { CardCategoriaComponent } from '../../components/cards/card-categoria/card-categoria.component';
 import { ModalNotificacionComponent } from '../../components/modals/modal-notificacion/modal-notificacion.component';
 import { EstadisticasService } from '../../services/estadisticas.service';
 import { AdminEstadoService } from '../../services/admin-estado.service';
@@ -23,6 +24,7 @@ Chart.register(...registerables);
     CardProveedorComponent,
     CardEmpleadoComponent,
     CardDescuentoComponent,
+    CardCategoriaComponent,
     ModalNotificacionComponent
   ],
   templateUrl: './administrador.component.html',
@@ -42,14 +44,14 @@ export class AdministradorComponent implements OnInit, AfterViewChecked, OnDestr
 
   readonly resumen$: Observable<any>;
 
-constructor(
-  private ngZone: NgZone,
-  private estadisticasService: EstadisticasService,
-  private adminEstado: AdminEstadoService,
-  private notificacionesService: NotificacionesService
-) {
-  this.resumen$ = this.adminEstado.resumen$;
-}
+  constructor(
+    private ngZone: NgZone,
+    private estadisticasService: EstadisticasService,
+    private adminEstado: AdminEstadoService,
+    private notificacionesService: NotificacionesService
+  ) {
+    this.resumen$ = this.adminEstado.resumen$;
+  }
 
   ngOnInit(): void {
     this.notificacionesService.conectar();
@@ -86,7 +88,6 @@ constructor(
       this.graficasPendientes = true;
       return;
     }
-
     this.cargando = true;
     this.estadisticasService.getResumenCompleto().pipe(
       takeUntil(this.destroy$)
@@ -100,9 +101,7 @@ constructor(
     });
   }
 
-  abrirNotificaciones(): void {
-    this.notificacionesAbiertas = true;
-  }
+  abrirNotificaciones(): void { this.notificacionesAbiertas = true; }
 
   private destroyCharts(): void {
     this.charts.forEach(c => c.destroy());
@@ -113,10 +112,8 @@ constructor(
   private initCharts(): void {
     if (this.chartsCreados) return;
     this.destroyCharts();
-
-    const estadisticas = this.adminEstado['_estadisticas$'].value;
+    const estadisticas = (this.adminEstado as any)['_estadisticas$'].value;
     if (!estadisticas) return;
-
     this.initChartVentasGanancias(estadisticas.ventas_por_mes);
     this.initChartVentasSemanales(estadisticas.ventas_semanales);
     this.initChartCategorias(estadisticas.ventas_por_categoria);
@@ -126,7 +123,7 @@ constructor(
   private initChartVentasGanancias(data: any[]): void {
     const ctx = document.getElementById('chartVentasGanancias') as HTMLCanvasElement;
     if (!ctx) return;
-    const chart = new Chart(ctx, {
+    this.charts.push(new Chart(ctx, {
       type: 'line',
       data: {
         labels: data.length ? data.map(v => v.nombre_mes) : ['Sin datos'],
@@ -134,16 +131,14 @@ constructor(
           {
             label: 'Ventas',
             data: data.map(v => Number(v.total_ventas)),
-            borderColor: '#D962A3',
-            backgroundColor: 'transparent',
+            borderColor: '#D962A3', backgroundColor: 'transparent',
             tension: 0, borderWidth: 2,
             pointBackgroundColor: '#D962A3', pointRadius: 4
           },
           {
             label: 'Ganancias',
             data: data.map(v => Number(v.total_ganancias)),
-            borderColor: '#F2A0CD',
-            backgroundColor: 'transparent',
+            borderColor: '#F2A0CD', backgroundColor: 'transparent',
             tension: 0, borderWidth: 2,
             pointBackgroundColor: '#F2A0CD', pointRadius: 4
           }
@@ -153,18 +148,17 @@ constructor(
         responsive: true, maintainAspectRatio: false,
         plugins: { legend: { display: false } },
         scales: {
-          x: { grid: { color: 'rgba(200,200,200,0.3)' }, ticks: { color: '#888', font: { family: 'Inter', size: 11 } }, border: { color: '#333' } },
-          y: { grid: { color: 'rgba(200,200,200,0.3)' }, ticks: { color: '#888', font: { family: 'Inter', size: 11 }, callback: (val) => Number(val).toLocaleString() }, border: { color: '#333' } }
+          x: { grid: { color: 'rgba(200,200,200,0.3)' }, ticks: { color: '#888', font: { family: 'Inter', size: 10 } }, border: { color: '#333' } },
+          y: { grid: { color: 'rgba(200,200,200,0.3)' }, ticks: { color: '#888', font: { family: 'Inter', size: 10 }, callback: (val) => Number(val).toLocaleString() }, border: { color: '#333' } }
         }
       }
-    });
-    this.charts.push(chart);
+    }));
   }
 
   private initChartVentasSemanales(data: any[]): void {
     const ctx = document.getElementById('chartVentasSemanales') as HTMLCanvasElement;
     if (!ctx) return;
-    const chart = new Chart(ctx, {
+    this.charts.push(new Chart(ctx, {
       type: 'bar',
       data: {
         labels: data.length ? data.map(v => v.nombre_dia) : ['Sin datos'],
@@ -178,18 +172,17 @@ constructor(
         responsive: true, maintainAspectRatio: false,
         plugins: { legend: { display: false } },
         scales: {
-          x: { grid: { color: 'rgba(200,200,200,0.3)' }, ticks: { color: '#888', font: { family: 'Inter', size: 11 } }, border: { color: '#333' } },
-          y: { grid: { color: 'rgba(200,200,200,0.3)' }, ticks: { color: '#888', font: { family: 'Inter', size: 11 }, callback: (val) => Number(val).toLocaleString() }, border: { color: '#333' } }
+          x: { grid: { color: 'rgba(200,200,200,0.3)' }, ticks: { color: '#888', font: { family: 'Inter', size: 10 } }, border: { color: '#333' } },
+          y: { grid: { color: 'rgba(200,200,200,0.3)' }, ticks: { color: '#888', font: { family: 'Inter', size: 10 }, callback: (val) => Number(val).toLocaleString() }, border: { color: '#333' } }
         }
       }
-    });
-    this.charts.push(chart);
+    }));
   }
 
   private initChartCategorias(data: any[]): void {
     const ctx = document.getElementById('chartCategorias') as HTMLCanvasElement;
     if (!ctx) return;
-    const chart = new Chart(ctx, {
+    this.charts.push(new Chart(ctx, {
       type: 'pie',
       data: {
         labels: data.length ? data.map(v => v.categoria) : ['Sin datos'],
@@ -201,11 +194,8 @@ constructor(
       },
       options: {
         responsive: true, maintainAspectRatio: false,
-        plugins: {
-          legend: { position: 'bottom', labels: { color: '#888', font: { family: 'Inter', size: 11 }, padding: 16 } }
-        }
+        plugins: { legend: { position: 'bottom', labels: { color: '#888', font: { family: 'Inter', size: 10 }, padding: 12 } } }
       }
-    });
-    this.charts.push(chart);
+    }));
   }
 }
