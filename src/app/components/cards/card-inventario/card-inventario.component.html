@@ -74,10 +74,20 @@
   @if (!vistaGrid) {
     <div class="table-panel">
       <table class="products-table">
+        <colgroup>
+          <col class="col-w-producto">
+          <col class="col-w-codigo">
+          <col class="col-w-categoria">
+          <col class="col-w-precio">
+          <col class="col-w-stock">
+          <col class="col-w-estado">
+          <col class="col-w-proveedor">
+          <col class="col-w-acciones">
+        </colgroup>
         <thead>
           <tr>
             <th>Producto</th>
-            <th>Codigo</th>
+            <th>Código</th>
             <th>Categoría</th>
             <th>Precio</th>
             <th>Stock</th>
@@ -87,82 +97,74 @@
           </tr>
         </thead>
         <tbody>
-  @let productos = (productosPagina$ | async) ?? [];
-  @if (productos.length === 0 && !cargando) {
-    <tr class="product-row">
-      <td colspan="8" class="empty-state">
-        No se encontraron productos
-      </td>
-    </tr>
-    @for (f of [1,2,3,4,5,6]; track f) {
-      <tr class="product-row-phantom"><td colspan="8"></td></tr>
-    }
-  }
-  @for (producto of productos; track producto.id_producto) {
-    <tr class="product-row">
-      <td class="col-producto">
-        @if (producto.imagen) {
-          <img [src]="getImagenUrl(producto.imagen)" [alt]="producto.nombre"
-            class="product-img-placeholder" style="object-fit: cover;">
-        } @else {
-          <div class="product-img-placeholder"></div>
-        }
-        <span class="product-name">{{ producto.nombre }}</span>
-      </td>
-      <td>
-        <span class="sku-badge">{{ producto.codigos_barras?.[0]?.codigo ?? '—' }}</span>
-      </td>
-      <td class="col-text">{{ producto.categoria?.nombre ?? '—' }}</td>
-      <td><span class="price-text">${{ producto.precio }}</span></td>
-      <td class="col-text">{{ producto.stock }}</td>
-      <td>
-        <span class="estado-badge" [ngClass]="getEstadoClass(producto)">
-          {{ getEstadoLabel(producto) }}
-        </span>
-      </td>
-      <td class="col-text">{{ producto.proveedor?.nombre ?? '—' }}</td>
-      <td>
-        <button class="menu-btn" (click)="toggleMenu(producto.id_producto)">•••</button>
-        @if (menuAbiertoId === producto.id_producto) {
-          <div class="dropdown-menu">
-            <button (click)="editarProducto(producto)">
-              <img src="assets/editar.svg" alt="editar"> Editar
-            </button>
-            <button (click)="eliminarProducto(producto.id_producto)" class="danger">
-              <img src="assets/eliminar.svg" alt="eliminar"> Eliminar
-            </button>
-          </div>
-        }
-      </td>
-    </tr>
-  }
-  @for (f of getFilasFantasma(productos.length); track f) {
-    <tr class="product-row-phantom"><td colspan="8"></td></tr>
-  }
-</tbody>
+          @let productos = (productosPagina$ | async) ?? [];
+          @if (productos.length === 0 && !cargando) {
+            <tr class="product-row">
+              <td colspan="8" class="empty-state">No se encontraron productos</td>
+            </tr>
+            @for (f of [1,2,3,4,5,6]; track f) {
+              <tr class="product-row-phantom"><td colspan="8"></td></tr>
+            }
+          }
+          @for (producto of productos; track producto.id_producto) {
+            <tr class="product-row">
+              <td class="col-producto">
+                @if (producto.imagen) {
+                  <img [src]="getImagenUrl(producto.imagen)" [alt]="producto.nombre"
+                    class="product-img-placeholder" style="object-fit: cover;">
+                } @else {
+                  <div class="product-img-placeholder"></div>
+                }
+                <span class="product-name">{{ producto.nombre }}</span>
+              </td>
+              <td class="col-codigo">
+                @if (producto.codigos_barras && producto.codigos_barras.length > 0) {
+                  <span class="sku-badge">{{ producto.codigos_barras[0].codigo }}</span>
+                } @else {
+                  <span class="col-text">—</span>
+                }
+              </td>
+              <td class="col-text">{{ producto.categoria?.nombre ?? '—' }}</td>
+              <td><span class="price-text">${{ producto.precio }}</span></td>
+              <td class="col-text">{{ producto.stock }}</td>
+              <td>
+                <span class="estado-badge" [ngClass]="getEstadoClass(producto)">
+                  {{ getEstadoLabel(producto) }}
+                </span>
+              </td>
+              <td class="col-text col-proveedor">{{ producto.proveedor?.nombre ?? '—' }}</td>
+              <td class="col-acciones">
+                <button class="menu-btn" (click)="toggleMenu(producto.id_producto)">•••</button>
+                @if (menuAbiertoId === producto.id_producto) {
+                  <div class="dropdown-menu">
+                    <button (click)="editarProducto(producto)">
+                      <img src="assets/editar.svg" alt="editar"> Editar
+                    </button>
+                    <button (click)="eliminarProducto(producto.id_producto)" class="danger">
+                      <img src="assets/eliminar.svg" alt="eliminar"> Eliminar
+                    </button>
+                  </div>
+                }
+              </td>
+            </tr>
+          }
+          @for (f of getFilasFantasma(productos.length); track f) {
+            <tr class="product-row-phantom"><td colspan="8"></td></tr>
+          }
+        </tbody>
       </table>
 
-      <!-- Paginación -->
       @if ((totalPaginas$ | async)! > 1) {
         @let total = (totalPaginas$ | async)!;
         <div class="pagination">
-          <button class="page-btn" (click)="paginaAnterior()" [disabled]="paginaActual() === 1">
-            ‹
-          </button>
+          <button class="page-btn" (click)="paginaAnterior()" [disabled]="paginaActual() === 1">‹</button>
           @for (p of getPaginas(total); track p) {
-            <button
-              class="page-btn"
-              [class.active]="p === paginaActual()"
-              (click)="irAPagina(p)">
+            <button class="page-btn" [class.active]="p === paginaActual()" (click)="irAPagina(p)">
               {{ p }}
             </button>
           }
-          <button class="page-btn" (click)="paginaSiguiente(total)" [disabled]="paginaActual() === total">
-            ›
-          </button>
-          <span class="page-info">
-            Página {{ paginaActual() }} de {{ total }}
-          </span>
+          <button class="page-btn" (click)="paginaSiguiente(total)" [disabled]="paginaActual() === total">›</button>
+          <span class="page-info">Página {{ paginaActual() }} de {{ total }}</span>
         </div>
       }
     </div>

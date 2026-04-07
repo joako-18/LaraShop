@@ -26,15 +26,22 @@ export class ModalNuevoProductoComponent implements OnInit, OnChanges {
   subiendoImagen: boolean = false;
   modoEdicion: boolean = false;
 
+  tallasOpciones = ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL',
+                    '28', '30', '32', '34', '36', '38', '40',
+                    '5', '5.5', '6', '6.5', '7', '7.5', '8',
+                    '8.5', '9', '9.5', '10', '10.5', '11', 'Única'];
+
   form = {
-  codigoBarras: '',
-  nombre: '',
-  precio: null as number | null,
-  cantidad: null as number | null,
-  cantidadMinima: null as number | null,
-  id_categoria: null as number | null,
-  id_proveedor: null as number | null
-};
+    codigoBarras:  '',
+    nombre:        '',
+    precio:        null as number | null,
+    precioVenta:   null as number | null,
+    cantidad:      null as number | null,
+    cantidadMinima: null as number | null,
+    talla:         '' as string,
+    id_categoria:  null as number | null,
+    id_proveedor:  null as number | null
+  };
 
   constructor(
     private proveedoresService: ProveedoresService,
@@ -52,13 +59,15 @@ export class ModalNuevoProductoComponent implements OnInit, OnChanges {
     if (changes['productoEditar'] && this.productoEditar) {
       this.modoEdicion = true;
       this.form = {
-        codigoBarras: this.productoEditar.codigos_barras?.[0]?.codigo ?? '',
-        nombre: this.productoEditar.nombre,
-        precio: Number(this.productoEditar.precio),
-        cantidad: this.productoEditar.stock,
+        codigoBarras:   this.productoEditar.codigos_barras?.[0]?.codigo ?? '',
+        nombre:         this.productoEditar.nombre,
+        precio:         Number(this.productoEditar.precio),
+        precioVenta:    this.productoEditar.precio_venta ? Number(this.productoEditar.precio_venta) : null,
+        cantidad:       this.productoEditar.stock,
         cantidadMinima: this.productoEditar.stock_minimo,
-        id_categoria: this.productoEditar.id_categoria,
-        id_proveedor: this.productoEditar.id_proveedor
+        talla:          this.productoEditar.talla ?? '',
+        id_categoria:   this.productoEditar.id_categoria,
+        id_proveedor:   this.productoEditar.id_proveedor
       };
       if (this.productoEditar.imagen) {
         this.imagenArchivoNombre = this.productoEditar.imagen;
@@ -89,7 +98,6 @@ export class ModalNuevoProductoComponent implements OnInit, OnChanges {
     const reader = new FileReader();
     reader.onload = (e) => { this.imagenPreview = e.target?.result as string; };
     reader.readAsDataURL(file);
-
     this.subiendoImagen = true;
     this.imagenesService.subirImagen(file).subscribe({
       next: (res) => {
@@ -114,29 +122,33 @@ export class ModalNuevoProductoComponent implements OnInit, OnChanges {
         !this.form.id_categoria || !this.form.id_proveedor || this.subiendoImagen) return;
 
     this.guardado.emit({
-      id: this.productoEditar?.id_producto ?? null,
-      codigoBarras: this.form.codigoBarras,
-      nombre: this.form.nombre,
-      precio: this.form.precio,
-      cantidad: this.form.cantidad,
+      id:             this.productoEditar?.id_producto ?? null,
+      codigoBarras:   this.form.codigoBarras,
+      nombre:         this.form.nombre,
+      precio:         this.form.precio,
+      precioVenta:    this.form.precioVenta,
+      cantidad:       this.form.cantidad,
       cantidadMinima: this.form.cantidadMinima ?? 0,
-      id_categoria: this.form.id_categoria,
-      id_proveedor: this.form.id_proveedor,
-      imagen: this.imagenArchivoNombre,
-      modoEdicion: this.modoEdicion
+      talla:          this.form.talla || null,
+      id_categoria:   this.form.id_categoria,
+      id_proveedor:   this.form.id_proveedor,
+      imagen:         this.imagenArchivoNombre,
+      modoEdicion:    this.modoEdicion
     });
     this.cerrar();
   }
 
   private resetForm(): void {
     this.form = {
-      codigoBarras: '',
-      nombre: '',
-      precio: null,
-      cantidad: null,
+      codigoBarras:   '',
+      nombre:         '',
+      precio:         null,
+      precioVenta:    null,
+      cantidad:       null,
       cantidadMinima: null,
-      id_categoria: null,
-      id_proveedor: null
+      talla:          '',
+      id_categoria:   null,
+      id_proveedor:   null
     };
     this.imagenPreview = null;
     this.imagenArchivoNombre = null;

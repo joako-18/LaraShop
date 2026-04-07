@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 
 export interface Categoria {
@@ -23,8 +23,10 @@ export interface Producto {
   id_producto: number;
   nombre: string;
   precio: number;
+  precio_venta: number | null;
   stock: number;
   stock_minimo: number;
+  talla: string | null;
   id_categoria: number;
   id_proveedor: number;
   imagen: string | null;
@@ -37,8 +39,10 @@ export interface Producto {
 export interface ProductoCreate {
   nombre: string;
   precio: number;
+  precio_venta?: number | null;
   stock: number;
   stock_minimo: number;
+  talla?: string | null;
   id_categoria: number;
   id_proveedor: number;
   imagen?: string | null;
@@ -55,9 +59,7 @@ export class ProductosService {
   constructor(private http: HttpClient) {}
 
   getAll(skip = 0, limit = 100): Observable<Producto[]> {
-    const params = new HttpParams()
-      .set('skip', skip)
-      .set('limit', limit);
+    const params = new HttpParams().set('skip', skip).set('limit', limit);
     return this.http.get<Producto[]>(this.url + '/', { params });
   }
 
@@ -76,9 +78,7 @@ export class ProductosService {
   getByCodigoBarras(codigo: string): Observable<Producto | null> {
     return this.http.get<Producto>(
       `${environment.apiUrl}/codigos-barras/${encodeURIComponent(codigo)}`
-    ).pipe(
-      catchError(() => of(null))
-    );
+    ).pipe(catchError(() => of(null)));
   }
 
   create(producto: ProductoCreate): Observable<Producto> {

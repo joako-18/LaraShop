@@ -231,29 +231,31 @@ export class CardInventarioComponent implements OnInit, OnDestroy {
   onProductoGuardado(data: any): void {
   if (data.modoEdicion && data.id) {
     this.productosService.update(data.id, {
-      nombre: data.nombre,
-      precio: data.precio,
-      stock: data.cantidad,
+      nombre:       data.nombre,
+      precio:       data.precio,
+      precio_venta: data.precioVenta ?? null,
+      stock:        data.cantidad,
       stock_minimo: data.cantidadMinima,
+      talla:        data.talla ?? null,
       id_categoria: data.id_categoria,
       id_proveedor: data.id_proveedor,
-      imagen: data.imagen ?? null
+      imagen:       data.imagen ?? null
     }).subscribe({
-      next: (actualizado) => {
-        this.estadoService.actualizarProducto(actualizado);
-      },
+      next: (actualizado) => { this.estadoService.actualizarProducto(actualizado); },
       error: (err) => { this.errorMsg = err.error?.detail ?? 'Error al actualizar producto.'; }
     });
   } else {
     this.productosService.create({
-      nombre: data.nombre,
-      precio: data.precio,
-      stock: data.cantidad,
-      stock_minimo: data.cantidadMinima ?? 0,
-      id_categoria: data.id_categoria,
-      id_proveedor: data.id_proveedor,
-      imagen: data.imagen ?? null,
-      estado: 'activo',
+      nombre:        data.nombre,
+      precio:        data.precio,
+      precio_venta:  data.precioVenta ?? null,
+      stock:         data.cantidad,
+      stock_minimo:  data.cantidadMinima ?? 0,
+      talla:         data.talla ?? null,
+      id_categoria:  data.id_categoria,
+      id_proveedor:  data.id_proveedor,
+      imagen:        data.imagen ?? null,
+      estado:        'activo',
       codigo_barras: data.codigoBarras || null
     }).subscribe({
       next: (nuevo) => {

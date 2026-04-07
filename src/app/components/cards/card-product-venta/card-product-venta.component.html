@@ -2,7 +2,7 @@
   <div class="sku-badge">{{ codigoBarras }}</div>
   <div class="product-info">
     <span class="product-name">{{ item.producto.nombre }}</span>
-    <span class="product-price">${{ item.producto.precio }}</span>
+    <span class="product-price">${{ precioVenta.toFixed(2) }}</span>
   </div>
   <div class="stock-info">
     <span class="stock-label">Stock: {{ stockMaximo }}</span>

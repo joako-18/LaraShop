@@ -50,8 +50,14 @@ export class CardProductVentaComponent {
     return this.item.producto.codigos_barras?.[0]?.codigo ?? '—';
   }
 
+  get precioVenta(): number {
+    return this.item.producto.precio_venta
+      ? Number(this.item.producto.precio_venta)
+      : Number(this.item.producto.precio);
+  }
+
   get subtotal(): number {
-    return Number(this.item.producto.precio) * this.item.cantidad;
+    return this.precioVenta * this.item.cantidad;
   }
 
   get stockMaximo(): number {

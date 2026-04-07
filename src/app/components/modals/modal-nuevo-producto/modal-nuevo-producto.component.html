@@ -1,43 +1,66 @@
 @if (isOpen) {
   <div class="modal-overlay" (click)="onOverlayClick($event)">
     <div class="modal-box">
-
       <h2 class="modal-title">{{ modoEdicion ? 'EDITAR PRODUCTO' : 'NUEVO PRODUCTO' }}</h2>
 
       <div class="form-group">
         <label>Código de barras:</label>
-        <input type="text" class="modal-input full" [(ngModel)]="form.codigoBarras"
+        <input type="text" class="modal-input" [(ngModel)]="form.codigoBarras"
           placeholder="Ej: 021645897">
       </div>
 
       <div class="form-group">
         <label>Nombre:</label>
-        <input type="text" class="modal-input full" [(ngModel)]="form.nombre">
+        <input type="text" class="modal-input" [(ngModel)]="form.nombre">
       </div>
 
-      <div class="form-group">
-        <label>Precio:</label>
-        <input type="number" class="modal-input" [(ngModel)]="form.precio">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Precio costo:</label>
+          <input type="number" class="modal-input" [(ngModel)]="form.precio"
+            placeholder="0.00" min="0">
+        </div>
+        <div class="form-group">
+          <label>Precio venta:</label>
+          <input type="number" class="modal-input" [(ngModel)]="form.precioVenta"
+            placeholder="0.00" min="0">
+        </div>
       </div>
 
-      <div class="form-group">
-        <label>Cantidad:</label>
-        <input type="number" class="modal-input" [(ngModel)]="form.cantidad">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Cantidad:</label>
+          <input type="number" class="modal-input" [(ngModel)]="form.cantidad"
+            placeholder="0" min="0">
+        </div>
+        <div class="form-group">
+          <label>Cantidad mínima:</label>
+          <input type="number" class="modal-input" [(ngModel)]="form.cantidadMinima"
+            placeholder="0" min="0">
+        </div>
       </div>
 
-      <div class="form-group">
-        <label>Cantidad mínima:</label>
-        <input type="number" class="modal-input" [(ngModel)]="form.cantidadMinima">
-      </div>
-
-      <div class="form-group">
-        <label>Categoría:</label>
-        <select class="modal-input" [(ngModel)]="form.id_categoria">
-          <option [ngValue]="null" disabled>Selecciona una categoría</option>
-          @for (cat of categorias; track cat.id_categoria) {
-            <option [ngValue]="cat.id_categoria">{{ cat.nombre }}</option>
-          }
-        </select>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Talla:</label>
+          <div class="talla-group">
+            <select class="modal-input" [(ngModel)]="form.talla">
+              <option value="">Sin talla</option>
+              @for (t of tallasOpciones; track t) {
+                <option [value]="t">{{ t }}</option>
+              }
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Categoría:</label>
+          <select class="modal-input" [(ngModel)]="form.id_categoria">
+            <option [ngValue]="null" disabled>Selecciona</option>
+            @for (cat of categorias; track cat.id_categoria) {
+              <option [ngValue]="cat.id_categoria">{{ cat.nombre }}</option>
+            }
+          </select>
+        </div>
       </div>
 
       <div class="form-group">
@@ -52,8 +75,7 @@
 
       <div class="form-group">
         <label>Imagen:</label>
-        <div
-          class="image-dropzone"
+        <div class="image-dropzone"
           (click)="fileInput.click()"
           (dragover)="$event.preventDefault()"
           (drop)="onDrop($event)">
@@ -62,19 +84,19 @@
           } @else if (imagenPreview) {
             <img [src]="imagenPreview" alt="preview" class="image-preview">
           } @else {
-            <span class="dropzone-hint">Haz clic o arrastra una imagen aquí</span>
+            <span class="dropzone-hint">Clic o arrastra una imagen</span>
           }
         </div>
-        <input #fileInput type="file" accept="image/*" style="display:none" (change)="onFileChange($event)">
+        <input #fileInput type="file" accept="image/*" style="display:none"
+          (change)="onFileChange($event)">
       </div>
 
       <div class="modal-actions">
         <button class="btn-cancelar" (click)="cerrar()">CANCELAR</button>
         <button class="btn-agregar" (click)="guardar()" [disabled]="subiendoImagen">
-          {{ subiendoImagen ? 'Subiendo imagen...' : (modoEdicion ? 'Guardar Cambios' : 'Agregar Producto') }}
+          {{ subiendoImagen ? 'Subiendo...' : (modoEdicion ? 'Guardar Cambios' : 'Agregar Producto') }}
         </button>
       </div>
-
     </div>
   </div>
 }

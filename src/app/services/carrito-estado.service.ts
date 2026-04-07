@@ -19,71 +19,46 @@ export class CarritoEstadoService {
   readonly finalizando$ = this._finalizando$.asObservable();
   readonly ventaExitosa$ = this._ventaExitosa$.asObservable();
 
-  get carrito(): ItemCarrito[] {
-    return this._carrito$.value;
-  }
-
-  get finalizando(): boolean {
-    return this._finalizando$.value;
-  }
+  get carrito(): ItemCarrito[] { return this._carrito$.value; }
+  get finalizando(): boolean { return this._finalizando$.value; }
 
   get total(): number {
     return this._carrito$.value.reduce((acc, i) => {
-      const precio = Number(i.producto.precio) || 0;
-      const cantidad = Number(i.cantidad) || 0;
-      return acc + (precio * cantidad);
+      const precio = i.producto.precio_venta
+        ? Number(i.producto.precio_venta)
+        : Number(i.producto.precio);
+      return acc + (precio * i.cantidad);
     }, 0);
   }
 
-  setCarrito(items: ItemCarrito[]): void {
-    this._carrito$.next(items);
-  }
-
-  setFinalizando(v: boolean): void {
-    this._finalizando$.next(v);
-  }
-
-  setVentaExitosa(v: boolean): void {
-    this._ventaExitosa$.next(v);
-  }
+  setCarrito(items: ItemCarrito[]): void { this._carrito$.next(items); }
+  setFinalizando(v: boolean): void { this._finalizando$.next(v); }
+  setVentaExitosa(v: boolean): void { this._ventaExitosa$.next(v); }
 
   agregar(item: ItemCarrito): void {
     const actual = this._carrito$.value;
-
-    const existente = actual.find(
-      i => i.producto.id_producto === item.producto.id_producto
-    );
-
+    const existente = actual.find(i => i.producto.id_producto === item.producto.id_producto);
     if (existente) {
-      existente.cantidad += item.cantidad ?? 1;
+      existente.cantidad++;
       this._carrito$.next([...actual]);
     } else {
-      this._carrito$.next([
-        ...actual,
-        { ...item, cantidad: item.cantidad ?? 1 }
-      ]);
+      this._carrito$.next([...actual, item]);
     }
   }
 
   actualizar(id_producto: number, cantidad: number): void {
     this._carrito$.next(
       this._carrito$.value.map(i =>
-        i.producto.id_producto === id_producto
-          ? { ...i, cantidad }
-          : i
+        i.producto.id_producto === id_producto ? { ...i, cantidad } : i
       )
     );
   }
 
   eliminar(id_producto: number): void {
     this._carrito$.next(
-      this._carrito$.value.filter(
-        i => i.producto.id_producto !== id_producto
-      )
+      this._carrito$.value.filter(i => i.producto.id_producto !== id_producto)
     );
   }
 
-  vaciar(): void {
-    this._carrito$.next([]);
-  }
+  vaciar(): void { this._carrito$.next([]); }
 }

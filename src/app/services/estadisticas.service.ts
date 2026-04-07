@@ -5,9 +5,10 @@ import { environment } from '../../environments/environment';
 
 export interface ResumenGeneral {
   ventas_del_mes: number;
+  total_ingresos_venta: number;
+  ganancias_del_mes: number;
   total_productos: number;
   productos_stock_bajo: number;
-  ganancias_del_mes: number;
 }
 
 export interface VentaPorMes {
@@ -34,6 +35,7 @@ export interface ProductoMasVendido {
   nombre: string;
   cantidad_vendida: number;
   total_generado: number;
+  porcentaje: number;
 }
 
 export interface ResumenEstadisticas {
@@ -54,28 +56,5 @@ export class EstadisticasService {
     let params = new HttpParams();
     if (anio) params = params.set('anio', anio);
     return this.http.get<ResumenEstadisticas>(`${this.url}/resumen`, { params });
-  }
-
-  getResumenGeneral(): Observable<ResumenGeneral> {
-    return this.http.get<ResumenGeneral>(`${this.url}/resumen-general`);
-  }
-
-  getVentasPorMes(anio?: number): Observable<VentaPorMes[]> {
-    let params = new HttpParams();
-    if (anio) params = params.set('anio', anio);
-    return this.http.get<VentaPorMes[]>(`${this.url}/ventas-por-mes`, { params });
-  }
-
-  getVentasSemanales(): Observable<VentaPorDia[]> {
-    return this.http.get<VentaPorDia[]>(`${this.url}/ventas-semanales`);
-  }
-
-  getVentasPorCategoria(): Observable<VentaPorCategoria[]> {
-    return this.http.get<VentaPorCategoria[]>(`${this.url}/ventas-por-categoria`);
-  }
-
-  getProductosMasVendidos(limit = 10): Observable<ProductoMasVendido[]> {
-    const params = new HttpParams().set('limit', limit);
-    return this.http.get<ProductoMasVendido[]>(`${this.url}/productos-mas-vendidos`, { params });
   }
 }

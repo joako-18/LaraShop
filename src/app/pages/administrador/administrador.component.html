@@ -9,86 +9,82 @@
     </div>
 
     <nav class="tabs-nav">
-      <button class="tab-btn" [class.active]="tabActiva === 'dashboard'" (click)="cambiarTab('dashboard')">
-        DASHBOARD
-      </button>
-      <button class="tab-btn" [class.active]="tabActiva === 'proveedores'" (click)="cambiarTab('proveedores')">
-        PROVEEDORES
-      </button>
-      <button class="tab-btn" [class.active]="tabActiva === 'empleados'" (click)="cambiarTab('empleados')">
-        EMPLEADOS
-      </button>
-      <button class="tab-btn" [class.active]="tabActiva === 'descuentos'" (click)="cambiarTab('descuentos')">
-        DESCUENTOS
-      </button>
-      <button class="tab-btn" [class.active]="tabActiva === 'categorias'" (click)="cambiarTab('categorias')">
-        CATEGORÍAS
-      </button>
+      <button class="tab-btn" [class.active]="tabActiva === 'dashboard'"
+        (click)="cambiarTab('dashboard')">DASHBOARD</button>
+      <button class="tab-btn" [class.active]="tabActiva === 'proveedores'"
+        (click)="cambiarTab('proveedores')">PROVEEDORES</button>
+      <button class="tab-btn" [class.active]="tabActiva === 'empleados'"
+        (click)="cambiarTab('empleados')">EMPLEADOS</button>
+      <button class="tab-btn" [class.active]="tabActiva === 'descuentos'"
+        (click)="cambiarTab('descuentos')">DESCUENTOS</button>
+      <button class="tab-btn" [class.active]="tabActiva === 'categorias'"
+        (click)="cambiarTab('categorias')">CATEGORÍAS</button>
     </nav>
 
     @if (tabActiva === 'dashboard') {
       <div class="dashboard-content">
+
         @if (cargando) {
-          <p style="color:#aaa; font-style:italic; text-align:center; font-size:0.85rem;">
-            Cargando estadísticas...
-          </p>
+          <p class="loading-hint">Cargando estadísticas...</p>
         }
-        @if (resumen$ | async; as resumen) {
-          <div class="stats-grid">
+
+        @if (estadisticas) {
+          <div class="stats-grid-3">
             <div class="stat-card">
-              <span class="stat-label">Ventas del Mes</span>
+              <span class="stat-label">Precio Unitario</span>
               <strong class="stat-value">
-                ${{ Number(resumen.ventas_del_mes).toLocaleString('es-MX') }}
+                ${{ Number(estadisticas.resumen.ventas_del_mes).toLocaleString('es-MX') }}
               </strong>
             </div>
             <div class="stat-card">
-              <span class="stat-label">Productos</span>
-              <strong class="stat-value">{{ resumen.total_productos }}</strong>
-            </div>
-            <div class="stat-card">
-              <span class="stat-label">Stock bajo</span>
-              <strong class="stat-value">{{ resumen.productos_stock_bajo }}</strong>
+              <span class="stat-label">Precio Venta</span>
+              <strong class="stat-value">
+                ${{ Number(estadisticas.resumen.total_ingresos_venta).toLocaleString('es-MX') }}
+              </strong>
             </div>
             <div class="stat-card">
               <span class="stat-label">Ganancias</span>
               <strong class="stat-value">
-                ${{ Number(resumen.ganancias_del_mes).toLocaleString('es-MX') }}
+                ${{ Number(estadisticas.resumen.ganancias_del_mes).toLocaleString('es-MX') }}
               </strong>
             </div>
           </div>
+
+          <div class="charts-row">
+
+            <div class="chart-panel">
+              <h3 class="chart-title">VENTAS SEMANALES</h3>
+              <div class="chart-canvas-wrap">
+                <canvas id="chartSemanales"></canvas>
+              </div>
+            </div>
+
+            <div class="chart-panel chart-chico">
+              <h3 class="chart-title">PRODUCTO MÁS VENDIDO</h3>
+              <div class="chart-pie-wrap">
+                <canvas id="chartProductos"></canvas>
+              </div>
+              <div class="leyenda-lista">
+                @for (p of estadisticas.productos_mas_vendidos; track p.id_producto; let i = $index) {
+                  <div class="leyenda-item">
+                    <span class="leyenda-dot" [style.background]="getLeyendaColor(i)"></span>
+                    <span class="leyenda-nombre">{{ p.nombre | uppercase }}</span>
+                    <strong class="leyenda-pct">{{ p.porcentaje }}%</strong>
+                  </div>
+                }
+              </div>
+            </div>
+
+          </div>
         }
-        <div class="chart-panel">
-          <h3 class="chart-title">VENTAS Y GANANCIAS</h3>
-          <canvas id="chartVentasGanancias" style="max-height: 200px;"></canvas>
-        </div>
-        <div class="charts-row">
-          <div class="chart-panel">
-            <h3 class="chart-title">VENTAS SEMANALES</h3>
-            <canvas id="chartVentasSemanales" style="max-height: 170px;"></canvas>
-          </div>
-          <div class="chart-panel">
-            <h3 class="chart-title">VENTAS POR CATEGORÍA</h3>
-            <canvas id="chartCategorias" style="max-height: 170px;"></canvas>
-          </div>
-        </div>
+
       </div>
     }
 
-    @if (tabActiva === 'proveedores') {
-      <app-card-proveedor></app-card-proveedor>
-    }
-
-    @if (tabActiva === 'empleados') {
-      <app-card-empleado></app-card-empleado>
-    }
-
-    @if (tabActiva === 'descuentos') {
-      <app-card-descuento></app-card-descuento>
-    }
-
-    @if (tabActiva === 'categorias') {
-      <app-card-categoria></app-card-categoria>
-    }
+    @if (tabActiva === 'proveedores') { <app-card-proveedor></app-card-proveedor> }
+    @if (tabActiva === 'empleados')   { <app-card-empleado></app-card-empleado> }
+    @if (tabActiva === 'descuentos')  { <app-card-descuento></app-card-descuento> }
+    @if (tabActiva === 'categorias')  { <app-card-categoria></app-card-categoria> }
 
   </main>
 

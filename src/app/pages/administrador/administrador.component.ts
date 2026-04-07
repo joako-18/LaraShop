@@ -8,7 +8,7 @@ import { CardEmpleadoComponent } from '../../components/cards/card-empleado/card
 import { CardDescuentoComponent } from '../../components/cards/card-descuento/card-descuento.component';
 import { CardCategoriaComponent } from '../../components/cards/card-categoria/card-categoria.component';
 import { ModalNotificacionComponent } from '../../components/modals/modal-notificacion/modal-notificacion.component';
-import { EstadisticasService } from '../../services/estadisticas.service';
+import { EstadisticasService, ResumenEstadisticas } from '../../services/estadisticas.service';
 import { AdminEstadoService } from '../../services/admin-estado.service';
 import { NotificacionesService } from '../../services/notificaciones.service';
 import { Chart, registerables } from 'chart.js';
@@ -19,7 +19,6 @@ Chart.register(...registerables);
   selector: 'app-administrador',
   imports: [
     CommonModule,
-    AsyncPipe,
     NavbarComponent,
     CardProveedorComponent,
     CardEmpleadoComponent,
@@ -37,8 +36,10 @@ export class AdministradorComponent implements OnInit, AfterViewChecked, OnDestr
   cargando: boolean = false;
   Number = Number;
 
-  private graficasPendientes: boolean = false;
-  private chartsCreados: boolean = false;
+  estadisticas: ResumenEstadisticas | null = null;
+
+  private graficasPendientes = false;
+  private chartsCreados = false;
   private charts: Chart[] = [];
   private destroy$ = new Subject<void>();
 
@@ -60,7 +61,7 @@ export class AdministradorComponent implements OnInit, AfterViewChecked, OnDestr
 
   ngAfterViewChecked(): void {
     if (this.graficasPendientes && this.tabActiva === 'dashboard') {
-      const canvas = document.getElementById('chartVentasGanancias');
+      const canvas = document.getElementById('chartSemanales');
       if (canvas) {
         this.graficasPendientes = false;
         this.ngZone.runOutsideAngular(() => setTimeout(() => this.initCharts(), 0));
@@ -85,6 +86,7 @@ export class AdministradorComponent implements OnInit, AfterViewChecked, OnDestr
 
   cargarEstadisticas(): void {
     if (this.adminEstado.estadisticasCargadas()) {
+      this.estadisticas = (this.adminEstado as any)['_estadisticas$'].value;
       this.graficasPendientes = true;
       return;
     }
@@ -93,6 +95,7 @@ export class AdministradorComponent implements OnInit, AfterViewChecked, OnDestr
       takeUntil(this.destroy$)
     ).subscribe({
       next: (data) => {
+        this.estadisticas = data;
         this.adminEstado.setEstadisticas(data);
         this.cargando = false;
         this.graficasPendientes = true;
@@ -110,53 +113,15 @@ export class AdministradorComponent implements OnInit, AfterViewChecked, OnDestr
   }
 
   private initCharts(): void {
-    if (this.chartsCreados) return;
+    if (this.chartsCreados || !this.estadisticas) return;
     this.destroyCharts();
-    const estadisticas = (this.adminEstado as any)['_estadisticas$'].value;
-    if (!estadisticas) return;
-    this.initChartVentasGanancias(estadisticas.ventas_por_mes);
-    this.initChartVentasSemanales(estadisticas.ventas_semanales);
-    this.initChartCategorias(estadisticas.ventas_por_categoria);
+    this.initChartSemanales(this.estadisticas.ventas_semanales);
+    this.initChartProductos(this.estadisticas.productos_mas_vendidos);
     this.chartsCreados = true;
   }
 
-  private initChartVentasGanancias(data: any[]): void {
-    const ctx = document.getElementById('chartVentasGanancias') as HTMLCanvasElement;
-    if (!ctx) return;
-    this.charts.push(new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: data.length ? data.map(v => v.nombre_mes) : ['Sin datos'],
-        datasets: [
-          {
-            label: 'Ventas',
-            data: data.map(v => Number(v.total_ventas)),
-            borderColor: '#D962A3', backgroundColor: 'transparent',
-            tension: 0, borderWidth: 2,
-            pointBackgroundColor: '#D962A3', pointRadius: 4
-          },
-          {
-            label: 'Ganancias',
-            data: data.map(v => Number(v.total_ganancias)),
-            borderColor: '#F2A0CD', backgroundColor: 'transparent',
-            tension: 0, borderWidth: 2,
-            pointBackgroundColor: '#F2A0CD', pointRadius: 4
-          }
-        ]
-      },
-      options: {
-        responsive: true, maintainAspectRatio: false,
-        plugins: { legend: { display: false } },
-        scales: {
-          x: { grid: { color: 'rgba(200,200,200,0.3)' }, ticks: { color: '#888', font: { family: 'Inter', size: 10 } }, border: { color: '#333' } },
-          y: { grid: { color: 'rgba(200,200,200,0.3)' }, ticks: { color: '#888', font: { family: 'Inter', size: 10 }, callback: (val) => Number(val).toLocaleString() }, border: { color: '#333' } }
-        }
-      }
-    }));
-  }
-
-  private initChartVentasSemanales(data: any[]): void {
-    const ctx = document.getElementById('chartVentasSemanales') as HTMLCanvasElement;
+  private initChartSemanales(data: any[]): void {
+    const ctx = document.getElementById('chartSemanales') as HTMLCanvasElement;
     if (!ctx) return;
     this.charts.push(new Chart(ctx, {
       type: 'bar',
@@ -165,37 +130,62 @@ export class AdministradorComponent implements OnInit, AfterViewChecked, OnDestr
         datasets: [{
           label: 'Ventas',
           data: data.map(v => Number(v.total_ventas)),
-          backgroundColor: '#D962A3', borderRadius: 4, borderSkipped: false
+          backgroundColor: '#D962A3',
+          borderRadius: 6,
+          borderSkipped: false
         }]
       },
       options: {
-        responsive: true, maintainAspectRatio: false,
+        responsive: true,
+        maintainAspectRatio: false,
         plugins: { legend: { display: false } },
         scales: {
-          x: { grid: { color: 'rgba(200,200,200,0.3)' }, ticks: { color: '#888', font: { family: 'Inter', size: 10 } }, border: { color: '#333' } },
-          y: { grid: { color: 'rgba(200,200,200,0.3)' }, ticks: { color: '#888', font: { family: 'Inter', size: 10 }, callback: (val) => Number(val).toLocaleString() }, border: { color: '#333' } }
+          x: {
+            grid: { color: 'rgba(200,200,200,0.25)', lineWidth: 1 },
+            ticks: { color: '#999', font: { family: 'Inter', size: 10 } },
+            border: { color: '#ddd' }
+          },
+          y: {
+            grid: { color: 'rgba(200,200,200,0.25)', lineWidth: 1 },
+            ticks: {
+              color: '#999',
+              font: { family: 'Inter', size: 10 },
+              callback: (val) => `${Number(val).toLocaleString()}`
+            },
+            border: { color: '#ddd' }
+          }
         }
       }
     }));
   }
 
-  private initChartCategorias(data: any[]): void {
-    const ctx = document.getElementById('chartCategorias') as HTMLCanvasElement;
+  private initChartProductos(data: any[]): void {
+    const ctx = document.getElementById('chartProductos') as HTMLCanvasElement;
     if (!ctx) return;
+    const colores = ['#D962A3', '#F2A0CD', '#e87bbf', '#f5c0df', '#c9559a', '#f0b8d8'];
     this.charts.push(new Chart(ctx, {
       type: 'pie',
       data: {
-        labels: data.length ? data.map(v => v.categoria) : ['Sin datos'],
+        labels: data.length ? data.map(v => v.nombre) : ['Sin datos'],
         datasets: [{
-          data: data.length ? data.map(v => Number(v.total_ventas)) : [1],
-          backgroundColor: ['#D962A3', '#F2A0CD', '#e87bbf', '#f5c0df', '#c9559a'],
-          borderColor: '#ffffff', borderWidth: 3
+          data: data.length ? data.map(v => v.cantidad_vendida) : [1],
+          backgroundColor: colores,
+          borderColor: '#ffffff',
+          borderWidth: 3
         }]
       },
       options: {
-        responsive: true, maintainAspectRatio: false,
-        plugins: { legend: { position: 'bottom', labels: { color: '#888', font: { family: 'Inter', size: 10 }, padding: 12 } } }
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false }
+        }
       }
     }));
   }
+
+  getLeyendaColor(index: number): string {
+  const colores = ['#D962A3', '#F2A0CD', '#e87bbf', '#f5c0df', '#c9559a', '#f0b8d8'];
+  return colores[index % colores.length];
+}
 }
