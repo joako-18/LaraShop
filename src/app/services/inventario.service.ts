@@ -2,9 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
-
-export interface CategoriaCreate { nombre: string; }
-export interface CategoriaRead  { id_categoria: number; nombre: string; }
+import { CategoriaCreate, CategoriaRead } from '../models';
 
 @Injectable({ providedIn: 'root' })
 export class InventarioService {

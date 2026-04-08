@@ -3,54 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
-
-export interface Categoria {
-  id_categoria: number;
-  nombre: string;
-}
-
-export interface Proveedor {
-  id_proveedor: number;
-  nombre: string;
-}
-
-export interface CodigoBarras {
-  id_codigo: number;
-  codigo: string;
-}
-
-export interface Producto {
-  id_producto: number;
-  nombre: string;
-  precio: number;
-  precio_venta: number | null;
-  stock: number;
-  stock_minimo: number;
-  talla: string | null;
-  id_categoria: number;
-  id_proveedor: number;
-  imagen: string | null;
-  estado: 'activo' | 'inactivo';
-  categoria: Categoria | null;
-  proveedor: Proveedor | null;
-  codigos_barras?: CodigoBarras[];
-}
-
-export interface ProductoCreate {
-  nombre: string;
-  precio: number;
-  precio_venta?: number | null;
-  stock: number;
-  stock_minimo: number;
-  talla?: string | null;
-  id_categoria: number;
-  id_proveedor: number;
-  imagen?: string | null;
-  estado?: string;
-  codigo_barras?: string | null;
-}
-
-export interface ProductoUpdate extends Partial<ProductoCreate> {}
+import { Producto, ProductoCreate, ProductoUpdate } from '../models';
 
 @Injectable({ providedIn: 'root' })
 export class ProductosService {
@@ -68,10 +21,7 @@ export class ProductosService {
   }
 
   buscar(q: string, skip = 0, limit = 50): Observable<Producto[]> {
-    const params = new HttpParams()
-      .set('q', q.trim())
-      .set('skip', skip)
-      .set('limit', limit);
+    const params = new HttpParams().set('q', q.trim()).set('skip', skip).set('limit', limit);
     return this.http.get<Producto[]>(`${this.url}/buscar`, { params });
   }
 

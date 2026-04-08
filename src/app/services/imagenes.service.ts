@@ -2,15 +2,11 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
-
-export interface ImagenUploadResponse {
-  nombre_archivo: string;
-  url: string;
-}
+import { ImagenUploadResponse } from '../models/imagen';
 
 @Injectable({ providedIn: 'root' })
 export class ImagenesService {
-  private url = `${environment.apiUrl}/imagenes/productos`;
+  private url     = `${environment.apiUrl}/imagenes/productos`;
   private baseUrl = environment.apiUrl.replace('/v1', '');
 
   constructor(private http: HttpClient) {}

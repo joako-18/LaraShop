@@ -2,23 +2,7 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
 import { environment } from '../../environments/environment';
-
-export interface NotificacionWS {
-  tipo: string;
-  producto_id: number;
-  titulo: string;
-  lineas: string[];
-  tiempo: string;
-}
-
-export interface NotificacionRead {
-  id_notificacion: number;
-  id_producto: number;
-  mensaje: string;
-  stock_actual: number;
-  fecha: string;
-  enviada: boolean;
-}
+import { NotificacionWS, NotificacionRead } from '../models';
 
 @Injectable({ providedIn: 'root' })
 export class NotificacionesService implements OnDestroy {
@@ -31,29 +15,16 @@ export class NotificacionesService implements OnDestroy {
 
   conectar(): void {
     if (this.ws?.readyState === WebSocket.OPEN) return;
-
     this.ws = new WebSocket(this.wsUrl);
-
     this.ws.onmessage = (event) => {
-      try {
-        const data: NotificacionWS = JSON.parse(event.data);
-        this.notificacion$.next(data);
-      } catch {}
+      try { this.notificacion$.next(JSON.parse(event.data)); } catch {}
     };
-
-    this.ws.onclose = () => {
-      setTimeout(() => this.conectar(), 5000);
-    };
+    this.ws.onclose = () => setTimeout(() => this.conectar(), 5000);
   }
 
-  desconectar(): void {
-    this.ws?.close();
-    this.ws = null;
-  }
+  desconectar(): void { this.ws?.close(); this.ws = null; }
 
-  onNotificacion(): Observable<NotificacionWS> {
-    return this.notificacion$.asObservable();
-  }
+  onNotificacion(): Observable<NotificacionWS> { return this.notificacion$.asObservable(); }
 
   getAll(skip = 0, limit = 50): Observable<NotificacionRead[]> {
     return this.http.get<NotificacionRead[]>(
@@ -61,7 +32,5 @@ export class NotificacionesService implements OnDestroy {
     );
   }
 
-  ngOnDestroy(): void {
-    this.desconectar();
-  }
+  ngOnDestroy(): void { this.desconectar(); }
 }
