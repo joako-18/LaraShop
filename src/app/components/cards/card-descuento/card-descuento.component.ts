@@ -3,7 +3,8 @@ import { CommonModule, AsyncPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { DescuentosService, DescuentoRead } from '../../../services/descuentos.service';
+import { DescuentosService } from '../../../services/descuentos.service';
+import { DescuentoRead } from '../../../models';
 import { AdminEstadoService } from '../../../services/admin-estado.service';
 import { ModalNuevoDescuentoComponent } from '../../modals/modal-nuevo-descuento/modal-nuevo-descuento.component';
 

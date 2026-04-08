@@ -8,7 +8,8 @@ import { CardEmpleadoComponent } from '../../components/cards/card-empleado/card
 import { CardDescuentoComponent } from '../../components/cards/card-descuento/card-descuento.component';
 import { CardCategoriaComponent } from '../../components/cards/card-categoria/card-categoria.component';
 import { ModalNotificacionComponent } from '../../components/modals/modal-notificacion/modal-notificacion.component';
-import { EstadisticasService, ResumenEstadisticas } from '../../services/estadisticas.service';
+import { EstadisticasService } from '../../services/estadisticas.service';
+import { ResumenEstadisticas } from '../../models';
 import { AdminEstadoService } from '../../services/admin-estado.service';
 import { NotificacionesService } from '../../services/notificaciones.service';
 import { Chart, registerables } from 'chart.js';

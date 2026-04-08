@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { CategoriaRead } from '../../../services/categorias.service';
+import { CategoriaRead } from '../../../models';
 
 @Component({
   selector: 'app-modal-nueva-categoria',

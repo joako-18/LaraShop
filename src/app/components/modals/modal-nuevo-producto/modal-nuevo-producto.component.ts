@@ -1,9 +1,10 @@
 import { Component, EventEmitter, Input, Output, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { CategoriaRead } from '../../../services/inventario.service';
-import { ProveedorRead, ProveedoresService } from '../../../services/proveedores.service';
-import { Producto } from '../../../services/productos.service';
+import { CategoriaRead } from '../../../models'; 
+import { ProveedoresService } from '../../../services/proveedores.service';
+import { ProveedorRead } from '../../../models';
+import { Producto } from '../../../models';
 import { ImagenesService } from '../../../services/imagenes.service';
 
 @Component({

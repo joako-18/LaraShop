@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { EmpleadoRead } from '../../../services/empleados.service';
+import { EmpleadoRead } from '../../../models';
 
 @Component({
   selector: 'app-modal-nuevo-empleado',

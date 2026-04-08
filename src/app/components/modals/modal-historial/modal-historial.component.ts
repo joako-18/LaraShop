@@ -1,8 +1,9 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CardHistorialComponent } from '../../cards/card-historial/card-historial.component';
-import { EmpleadoRead } from '../../../services/empleados.service';
-import { HistorialService, HistorialAccionRead } from '../../../services/historial.service';
+import { EmpleadoRead } from '../../../models';
+import { HistorialService } from '../../../services/historial.service';
+import { HistorialAccionRead } from '../../../models';
 
 export interface EmpleadoDetalle extends EmpleadoRead {
   fechaIngreso: string;

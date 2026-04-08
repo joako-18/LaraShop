@@ -3,7 +3,8 @@ import { CommonModule, AsyncPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { ProveedoresService, ProveedorRead } from '../../../services/proveedores.service';
+import { ProveedoresService } from '../../../services/proveedores.service';
+import { ProveedorRead } from '../../../models';
 import { AdminEstadoService } from '../../../services/admin-estado.service';
 import { ModalNuevoProveedorComponent } from '../../modals/modal-nuevo-proveedor/modal-nuevo-proveedor.component';
 

@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output, OnChanges, SimpleChanges } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ProveedorRead } from '../../../services/proveedores.service';
+import { ProveedorRead } from '../../../models';
 
 @Component({
   selector: 'app-modal-nuevo-proveedor',

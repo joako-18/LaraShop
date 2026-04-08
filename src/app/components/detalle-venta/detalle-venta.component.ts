@@ -5,10 +5,13 @@ import { Observable, Subscription } from 'rxjs';
 import { ModalCorteCajaComponent } from '../modals/modal-corte-caja/modal-corte-caja.component';
 import { ModalConfirmacionComponent } from '../modals/modal-confirmacion/modal-confirmacion.component';
 import { ModalExitoVentaComponent } from '../modals/modal-exito-venta/modal-exito-venta.component';
-import { VentasService, VentaRead } from '../../services/ventas.service';
+import { VentasService } from '../../services/ventas.service';
+import { VentaRead } from '../../models';
 import { AuthService } from '../../services/auth.service';
-import { CarritoEstadoService, ItemCarrito } from '../../services/carrito-estado.service';
-import { ImpresoraService, DatosTicket } from '../../services/impresora.service';
+import { CarritoEstadoService } from '../../services/carrito-estado.service';
+import { ItemCarrito } from '../../models';
+import { ImpresoraService } from '../../services/impresora.service';
+import { DatosTicket } from '../../models';
 
 @Component({
   selector: 'app-detalle-venta',

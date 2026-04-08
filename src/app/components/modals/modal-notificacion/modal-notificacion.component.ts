@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, OnDestroy, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NotificacionesService, NotificacionRead } from '../../../services/notificaciones.service';
+import { NotificacionesService } from '../../../services/notificaciones.service';
+import { NotificacionRead } from '../../../models';
 import { Subscription } from 'rxjs';
 
 @Component({

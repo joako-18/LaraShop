@@ -3,7 +3,8 @@ import { CommonModule, AsyncPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { CategoriasService, CategoriaRead } from '../../../services/categorias.service';
+import { CategoriasService } from '../../../services/categorias.service';
+import { CategoriaRead } from '../../../models';
 import { AdminEstadoService } from '../../../services/admin-estado.service';
 import { ModalNuevaCategoriaComponent } from '../../modals/modal-nueva-categoria/modal-nueva-categoria.component';
 

@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ItemCarrito } from '../../../services/carrito-estado.service';
+import { ItemCarrito } from '../../../models';
 
 @Component({
   selector: 'app-card-product-venta',

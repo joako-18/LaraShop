@@ -1,9 +1,11 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { InventarioService, CategoriaRead } from '../../../services/inventario.service';
-import { ProductosService, Producto } from '../../../services/productos.service';
-import { DescuentoRead } from '../../../services/descuentos.service';
+import { InventarioService } from '../../../services/inventario.service';
+import { CategoriaRead } from '../../../models';
+import { ProductosService } from '../../../services/productos.service';
+import { Producto } from '../../../models';
+import { DescuentoRead } from '../../../models';
 
 @Component({
   selector: 'app-modal-nuevo-descuento',

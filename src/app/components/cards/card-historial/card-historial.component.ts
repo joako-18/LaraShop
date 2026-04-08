@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HistorialAccionRead } from '../../../services/historial.service';
+import { HistorialAccionRead } from '../../../models';
 
 @Component({
   selector: 'app-card-historial',

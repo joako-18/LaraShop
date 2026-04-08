@@ -4,9 +4,11 @@ import { FormsModule } from '@angular/forms';
 import { Observable, Subscription, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { CardProductVentaComponent } from '../cards/card-product-venta/card-product-venta.component';
-import { ProductosService, Producto } from '../../services/productos.service';
+import { ProductosService } from '../../services/productos.service';
+import { Producto } from '../../models';
 import { AuthService } from '../../services/auth.service';
-import { CarritoEstadoService, ItemCarrito } from '../../services/carrito-estado.service';
+import { CarritoEstadoService } from '../../services/carrito-estado.service';
+import { ItemCarrito } from '../../models';
 
 export type { ItemCarrito };
 
